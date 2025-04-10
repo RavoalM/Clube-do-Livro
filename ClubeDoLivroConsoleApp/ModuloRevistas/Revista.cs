@@ -18,5 +18,8 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             AnoPublicacao = anoPublicao;
             StatusEmprestimo = statusEmprestimo;
         }
+
+
+
     }
 }

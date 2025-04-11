@@ -14,6 +14,42 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             caixas[contadorCaixas++] = novaCaixa;
         }
 
+        public bool EditarCaixa(int idCaixa, Caixa caixaEditada)
+        {
+            for (int i = 0; i < caixas.Length; i++)
+            {
+                if (caixas[i] == null) continue;
+
+                else if (caixas[i].Id == idCaixa)
+                {
+                    caixas[i].Etiqueta = caixaEditada.Etiqueta;
+                    caixas[i].Cor = caixaEditada.Cor;
+                    caixas[i].DiasDeEmprestimo = caixaEditada.DiasDeEmprestimo;
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool ExcluirCaixa(int idCaixa)
+        {
+            for (int i = 0; i < caixas.Length; i++)
+            {
+                if (caixas[i] == null) continue;
+
+                else if (caixas[i].Id == idCaixa)
+                {
+                    caixas[i] = null;
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public Caixa SelecionarCaixaPorId(int idCaixa)
         {
             for (int i = 0; i < caixas.Length; i++)

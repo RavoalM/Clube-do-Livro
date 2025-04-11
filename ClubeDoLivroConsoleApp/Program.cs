@@ -49,9 +49,9 @@ namespace ClubeDoLivroConsoleApp
                     {
                         case '1': telaCaixa.CadastrarCaixa(); break;
 
-                        case '2': telaAmigo.EditarAmigo(); break;
+                        case '2': telaCaixa.EditarCaixa(); break;
 
-                        case '3': telaAmigo.ExcluirAmigo(); break;
+                        case '3': telaCaixa.ExcluirCaixa(); break;
 
                         case '4': telaCaixa.VisualizarCaixas(true); break;
 

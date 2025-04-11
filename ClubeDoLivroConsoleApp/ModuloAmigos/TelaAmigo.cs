@@ -21,6 +21,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Console.WriteLine("2 - Edição de Amigo");
             Console.WriteLine("3 - Exclusão de Amigo");
             Console.WriteLine("4 - Visualização de Amigo");
+            Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
 
             Console.Write("Digite um opção válida: ");
@@ -106,7 +107,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
 
             VisualizarAmigos(false);
 
-            Console.Write("Digite o ID do registro que deseja selecionar: ");
+            Console.Write("Digite o ID do membro que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
             bool conseguiuExcluir = repositorioAmigo.ExcluirAmigo(idSelecionado);

@@ -1,4 +1,6 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloAmigo;
+using ClubeDoLivroConsoleApp.ModuloAmigos;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
@@ -20,6 +22,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             Console.WriteLine("2 - Edição de Caixa");
             Console.WriteLine("3 - Exclusão de Caixa");
             Console.WriteLine("4 - Visualização de Caixa");
+            Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
 
             Console.Write("Digite um opção válida: ");
@@ -41,6 +44,45 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
             Console.WriteLine();
             Notificador.ExibirMensagem("A caixa foi cadastrado com sucesso!", ConsoleColor.Green);
+        }
+
+        public void EditarCaixa()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Editando Caixa...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarCaixas(false);
+
+            Console.Write("Digite o ID da caixa que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            Caixa caixaEditada = ObterDadosCaixa();
+        
+
+            bool conseguiuEditar = repositorioCaixa.EditarCaixa(idSelecionado, caixaEditada);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("A caixa foi editada com sucesso!", ConsoleColor.Green);
+        }
+
+        public void ExcluirCaixa()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Excluindo Membro...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarCaixas(false);
+
+            Console.Write("Digite o ID da caixa que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            bool conseguiuExcluir = repositorioCaixa.ExcluirCaixa(idSelecionado);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("A caixa foi excluída com sucesso!", ConsoleColor.Green);
         }
 
         public void VisualizarCaixas(bool exibirTitulo)

@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="ModuloCaixas\RepositorioCaixa.cs~RFd11f08.TMP" />
+  </ItemGroup>
+
 </Project>

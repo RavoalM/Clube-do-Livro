@@ -38,6 +38,23 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
 
             Amigo novoAmigo = ObterDadosAmigo();
 
+            string erros = novoAmigo.Validar();
+
+            if (repositorioAmigo.TelefoneRepetido(novoAmigo.Telefone))
+            {
+                Notificador.ExibirMensagem("Este telefone já pertence a outro amigo.", ConsoleColor.Red);
+                CadastrarAmigo();
+                return;
+            }
+
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+
+                CadastrarAmigo();
+                return;
+            }
+
             repositorioAmigo.CadastrarAmigo(novoAmigo);
 
             Console.WriteLine();
@@ -58,6 +75,22 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
 
             Amigo amigoEditado = ObterDadosAmigo();
 
+            string erros = amigoEditado.Validar();
+
+            if (repositorioAmigo.TelefoneRepetido(amigoEditado.Telefone, idSelecionado))
+            {
+                Notificador.ExibirMensagem("Este telefone já pertence a outro amigo.", ConsoleColor.Red);
+                EditarAmigo();
+                return;
+            }
+
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+
+                EditarAmigo();
+                return;
+            }
 
             bool conseguiuEditar = repositorioAmigo.EditarAmigo(idSelecionado, amigoEditado);
 

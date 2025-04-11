@@ -52,6 +52,36 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             return false;
         }
 
+        public bool TelefoneRepetido(string telefone, int idIgnorar = -1)
+        {
+            for (int i = 0; i < amigos.Length; i++)
+            {
+                if (amigos[i] == null)
+                    continue;
+
+                if (amigos[i].Telefone == telefone && amigos[i].Id != idIgnorar)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public Amigo SelecionarAmigoePorId(int idAmigo)
+        {
+            for (int i = 0; i < amigos.Length; i++)
+            {
+                Amigo a = amigos[i];
+
+                if (a == null)
+                    continue;
+
+                else if (a.Id == idAmigo)
+                    return a;
+            }
+
+            return null;
+        }
+
         public Amigo[] SelecionarAmigos()
         {
             return amigos;

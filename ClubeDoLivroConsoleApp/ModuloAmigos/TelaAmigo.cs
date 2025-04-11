@@ -80,7 +80,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             bool conseguiuExcluir = repositorioAmigo.ExcluirAmigo(idSelecionado);
 
             Console.WriteLine();
-            Notificador.ExibirMensagem("O fabricante foi excluído com sucesso!", ConsoleColor.Green);
+            Notificador.ExibirMensagem("O membro foi excluído com sucesso!", ConsoleColor.Green);
         }
 
 

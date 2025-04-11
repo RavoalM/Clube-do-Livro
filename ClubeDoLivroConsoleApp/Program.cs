@@ -1,5 +1,6 @@
 ﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.Gerais;
+using System.Reflection;
 
 namespace ClubeDoLivroConsoleApp
 {
@@ -27,9 +28,9 @@ namespace ClubeDoLivroConsoleApp
                     {
                         case '1': telaAmigo.CadastrarAmigo(); break;
 
-                        case '2': break;
+                        case '2': telaAmigo.EditarAmigo(); break;
 
-                        case '3': break;
+                        case '3': telaAmigo.ExcluirAmigo(); break;
 
                         case '4': telaAmigo.VisualizarAmigos(true); break;
 

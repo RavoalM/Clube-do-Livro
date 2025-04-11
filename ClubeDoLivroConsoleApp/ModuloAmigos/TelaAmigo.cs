@@ -44,6 +44,46 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Notificador.ExibirMensagem("O membro foi cadastrado com sucesso!", ConsoleColor.Green);
         }
 
+        public void EditarAmigo()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Editando Membro...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarAmigos(false);
+
+            Console.Write("Digite o ID do membro que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            Amigo amigoEditado = ObterDadosAmigo();
+
+
+            bool conseguiuEditar = repositorioAmigo.EditarAmigo(idSelecionado, amigoEditado);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("O membro foi editado com sucesso!", ConsoleColor.Green);
+        }
+
+        public void ExcluirAmigo()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Excluindo Membro...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarAmigos(false);
+
+            Console.Write("Digite o ID do registro que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            bool conseguiuExcluir = repositorioAmigo.ExcluirAmigo(idSelecionado);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("O fabricante foi excluído com sucesso!", ConsoleColor.Green);
+        }
+
+
         public void VisualizarAmigos(bool exibirTitulo)
         {
             if (exibirTitulo)

@@ -66,7 +66,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             return false;
         }
 
-        public Amigo SelecionarAmigoePorId(int idAmigo)
+        public Amigo SelecionarAmigoPorId(int idAmigo)
         {
             for (int i = 0; i < amigos.Length; i++)
             {

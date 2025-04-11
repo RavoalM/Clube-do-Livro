@@ -5,13 +5,13 @@
         public int Id;
         public string Etiqueta;
         public string Cor;
-        public DateTime DataDeEmprestimo;
+        public int DiasDeEmprestimo;
    
-        public Caixa(string etiqueta, string cor, DateTime dataDeEmprestimo)
+        public Caixa(string etiqueta, string cor, int diasDeEmprestimo)
         {
             Etiqueta = etiqueta;
             Cor = cor;
-            DataDeEmprestimo = dataDeEmprestimo;
+            DiasDeEmprestimo = diasDeEmprestimo;
         }
     }
 }

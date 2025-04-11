@@ -61,14 +61,35 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigo
                 erros += "O campo 'Telefone' deve seguir o formato 00 0000-0000.\n";
             }
 
-            if (!Telefone.All(c => char.IsDigit(c) || c == ' ' || c == '-'))
+            if (Telefone.Length < 12 || Telefone.Length > 13)
             {
-                erros += "O campo 'Telefone' deve conter apenas números."; 
+                erros += "O campo 'Telefone' deve seguir os formatos 00 0000-0000 ou 00 00000-0000.\n";
             }
 
-           
+            if (Telefone.Length >= 3 && (!char.IsDigit(Telefone[0]) || !char.IsDigit(Telefone[1]) || Telefone[2] !=' '))
+            {
+                erros += "O campo 'Telefone' deve começar com dois números seguido de um espaço.\n";
+            }
+
+            if (Telefone.Length == 12 && Telefone[7] != '-')
+            {
+                erros += "O campo 'Telefone' está errado! Use os formatos (00 0000-0000 ou 00 00000-0000).\n";
+            }
+
+            if (Telefone.Length == 13 && Telefone[8] != '-')
+            {
+                erros += "O campo 'Telefone' está errado! Use os formatos (00 0000-0000 ou 00 00000-0000).\n";
+            }
+
+            if (!Telefone.All(c => char.IsDigit(c) || c == ' ' || c == '-'))
+            {
+                erros += "O campo 'Telefone' está errado! Use os formatos (00 0000-0000 ou 00 00000-0000).";
+            }
+
             return erros;
         }
+
+
 
     }
 }

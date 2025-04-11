@@ -1,4 +1,5 @@
 ﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
+using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.Gerais;
 using System.Reflection;
 
@@ -9,8 +10,10 @@ namespace ClubeDoLivroConsoleApp
         static void Main(string[] args)
         {
             RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
+            RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
 
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo);
+            TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
 
             TelaPrincipal.Intruducao();
 
@@ -33,6 +36,24 @@ namespace ClubeDoLivroConsoleApp
                         case '3': telaAmigo.ExcluirAmigo(); break;
 
                         case '4': telaAmigo.VisualizarAmigos(true); break;
+
+                        default: break;
+                    }
+                }
+
+                if (opcaoPrincipal == '2')
+                {
+                    char opcaoEscolhida = telaCaixa.ApresentarMenu();
+
+                    switch (opcaoEscolhida)
+                    {
+                        case '1': telaCaixa.CadastrarCaixa(); break;
+
+                        case '2': telaAmigo.EditarAmigo(); break;
+
+                        case '3': telaAmigo.ExcluirAmigo(); break;
+
+                        case '4': telaCaixa.VisualizarCaixas(true); break;
 
                         default: break;
                     }

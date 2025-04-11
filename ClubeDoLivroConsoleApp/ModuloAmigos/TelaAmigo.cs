@@ -87,7 +87,6 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             if (erros.Length > 0)
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-
                 EditarAmigo();
                 return;
             }

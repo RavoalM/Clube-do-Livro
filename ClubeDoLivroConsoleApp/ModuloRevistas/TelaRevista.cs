@@ -45,7 +45,46 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             repositorioRevista.CadastrarRevista(novaRevista);
 
             Console.WriteLine();
-            Notificador.ExibirMensagem("A caixa foi cadastrado com sucesso!", ConsoleColor.Green);
+            Notificador.ExibirMensagem("A revista foi cadastrado com sucesso!", ConsoleColor.Green);
+        }
+
+        public void EditarRevista()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Editando Revista...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarRevistas(false);
+
+            Console.Write("Digite o ID da revista que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            Revista revistaEditada = ObterDadosRevista();
+
+
+            bool conseguiuEditar = repositorioRevista.EditarRevista(idSelecionado, revistaEditada);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("A revista foi editada com sucesso!", ConsoleColor.Green);
+        }
+
+        public void ExcluirRevista()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Excluindo revista...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarRevistas(false);
+
+            Console.Write("Digite o ID da revista que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            bool conseguiuExcluir = repositorioRevista.ExcluirRevista(idSelecionado);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("A revista foi excluída com sucesso!", ConsoleColor.Green);
         }
 
         public void VisualizarRevistas(bool exibirTitulo)
@@ -88,7 +127,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
         {
             Console.Clear();
             Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("Gestão de Caixas");
+            Console.WriteLine("Controle de Revistas");
             Console.WriteLine("--------------------------------------------");
         }
 

@@ -69,7 +69,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
         {
             ExibirCabecalho();
 
-            Console.WriteLine("Excluindo Membro...");
+            Console.WriteLine("Excluindo Caixa...");
             Console.WriteLine("--------------------------------------------");
 
             VisualizarCaixas(false);

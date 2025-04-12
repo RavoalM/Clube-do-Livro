@@ -70,9 +70,9 @@ namespace ClubeDoLivroConsoleApp
                     {
                         case '1': telaRevista.CadastraRevista(); break;
 
-                        case '2': telaCaixa.EditarCaixa(); break;
+                        case '2': telaRevista.EditarRevista(); break;
 
-                        case '3': telaCaixa.ExcluirCaixa(); break;
+                        case '3': telaRevista.ExcluirRevista(); break;
 
                         case '4': telaRevista.VisualizarRevistas(true); break;
 

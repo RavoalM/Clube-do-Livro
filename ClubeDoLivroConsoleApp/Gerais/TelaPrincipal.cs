@@ -43,6 +43,7 @@ namespace ClubeDoLivroConsoleApp.Gerais
             Console.WriteLine("1 - Controle de Membros");
             Console.WriteLine("2 - Controle de Caixas");
             Console.WriteLine("3 - Controle de Revistas");
+            Console.WriteLine("4 - Controle de Empréstimos");
 
             Console.WriteLine();
 

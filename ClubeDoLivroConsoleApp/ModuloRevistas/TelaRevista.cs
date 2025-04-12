@@ -1,6 +1,5 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
-using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloRevistas
 {
@@ -135,28 +134,21 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
         {
             Console.WriteLine("Visualizando Caixas...");
             Console.WriteLine("--------------------------------------------");
-
             Console.WriteLine();
-
             Console.WriteLine(
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
                 "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
             );
-
             Caixa[] caixasCadastradas = repositorioCaixa.SelecionarCaixas();
-
             for (int i = 0; i < caixasCadastradas.Length; i++)
             {
                 Caixa c = caixasCadastradas[i];
-
                 if (c == null) continue;
-
                 Console.WriteLine(
                     "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
                     c.Id, c.Etiqueta, c.Cor, c.DiasDeEmprestimo
                 );
             }
-
             Console.WriteLine();
         }
 

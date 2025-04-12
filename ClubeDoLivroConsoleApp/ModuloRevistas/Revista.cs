@@ -11,15 +11,14 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
         public string StatusEmprestimo;
         public Caixa Caixa;
 
-        public Revista(string titulo, int numeroEdicao, int anoPublicao, string statusEmprestimo)
+        public Revista(string titulo, int numeroEdicao, int anoPublicao, string statusEmprestimo, Caixa caixa)
         {
             Titulo = titulo;
             NumeroEdicao = numeroEdicao;
             AnoPublicacao = anoPublicao;
             StatusEmprestimo = statusEmprestimo;
+            Caixa = caixa;
         }
-
-
 
     }
 }

@@ -1,6 +1,4 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
-using ClubeDoLivroConsoleApp.ModuloAmigo;
-using ClubeDoLivroConsoleApp.ModuloAmigos;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {

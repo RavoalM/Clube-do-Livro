@@ -2,6 +2,7 @@
 using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.Gerais;
 using System.Reflection;
+using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp
 {
@@ -11,7 +12,9 @@ namespace ClubeDoLivroConsoleApp
         {
             RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
             RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+            RepositorioRevista repositorioRevista = new RepositorioRevista();
 
+            TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
 
@@ -54,6 +57,24 @@ namespace ClubeDoLivroConsoleApp
                         case '3': telaCaixa.ExcluirCaixa(); break;
 
                         case '4': telaCaixa.VisualizarCaixas(true); break;
+
+                        default: break;
+                    }
+                }
+
+                if (opcaoPrincipal == '3')
+                {
+                    char opcaoEscolhida = telaRevista.ApresentarMenu();
+
+                    switch (opcaoEscolhida)
+                    {
+                        case '1': telaRevista.CadastraRevista(); break;
+
+                        case '2': telaCaixa.EditarCaixa(); break;
+
+                        case '3': telaCaixa.ExcluirCaixa(); break;
+
+                        case '4': telaRevista.VisualizarRevistas(true); break;
 
                         default: break;
                     }

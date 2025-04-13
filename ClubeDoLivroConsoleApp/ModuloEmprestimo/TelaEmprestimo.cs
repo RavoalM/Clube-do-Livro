@@ -1,5 +1,4 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
-using ClubeDoLivroConsoleApp.ModuloAmigo;
 using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 
@@ -106,7 +105,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 "Id", "Nome", "Responsavel", "Telefone"
             );
             Amigo[] amigosCadastrados = repositorioAmigo.SelecionarAmigos();
-            for (int i = 0; i<amigosCadastrados.Length; i++)
+            for (int i = 0; i < amigosCadastrados.Length; i++)
             {
                 Amigo a = amigosCadastrados[i];
                 if (a == null) continue;

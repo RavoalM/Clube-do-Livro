@@ -1,7 +1,6 @@
-﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
+﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
-using ClubeDoLivroConsoleApp.Gerais;
-using System.Reflection;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 

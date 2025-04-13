@@ -1,6 +1,6 @@
 ﻿using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 
-namespace ClubeDoLivroConsoleApp.ModuloAmigo
+namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
     public class Amigo
     {

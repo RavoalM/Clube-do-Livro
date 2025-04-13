@@ -1,4 +1,4 @@
-﻿using ClubeDoLivroConsoleApp.ModuloAmigo;
+﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloEmprestimo

@@ -1,5 +1,4 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
-using ClubeDoLivroConsoleApp.ModuloAmigo;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
@@ -9,7 +8,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
 
         public TelaAmigo(RepositorioAmigo repositorioAmigo)
         {
-            this.repositorioAmigo = new RepositorioAmigo();
+            this.repositorioAmigo = repositorioAmigo;
         }
 
         public char ApresentarMenu()

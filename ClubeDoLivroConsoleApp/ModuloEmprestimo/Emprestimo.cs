@@ -11,12 +11,12 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
         public DateTime DataEmprestimo;
         public string Situacao;
 
-        public Emprestimo(Amigo amigo, Revista revista, DateTime dataEmprestimo, string situacao)
+        public Emprestimo(Amigo amigo, Revista revista)
         {
             Amigo = amigo;
             Revista = revista;
-            DataEmprestimo = dataEmprestimo;
-            Situacao = situacao;
+            DataEmprestimo = DateTime.Now;
+            Situacao = "Aberta";
         }
     }
 }

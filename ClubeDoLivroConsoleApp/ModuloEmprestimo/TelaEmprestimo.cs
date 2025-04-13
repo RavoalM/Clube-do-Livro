@@ -1,5 +1,6 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloAmigos;
+using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 
@@ -49,6 +50,45 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 
             Console.WriteLine();
             Notificador.ExibirMensagem("O empréstimo foi cadastrado com sucesso!", ConsoleColor.Green);
+        }
+
+        public void EditarEmprestimo()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Editando Empréstimo...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarEmprestimos(false);
+
+            Console.Write("Digite o ID da caixa que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            Emprestimo caixaEditada = ObterDadosEmprestimo();
+
+
+            bool conseguiuEditar = repositorioEmprestimo.EditarEmprestimo(idSelecionado, caixaEditada);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("A emprestimo foi editada com sucesso!", ConsoleColor.Green);
+        }
+
+        public void ExcluirEmprestimo()
+        {
+            ExibirCabecalho();
+
+            Console.WriteLine("Excluindo Emprestimos...");
+            Console.WriteLine("--------------------------------------------");
+
+            VisualizarEmprestimos(false);
+
+            Console.Write("Digite o ID do emprestimo que deseja selecionar: ");
+            int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            bool conseguiuExcluir = repositorioEmprestimo.ExcluirEmprestimo(idSelecionado);
+
+            Console.WriteLine();
+            Notificador.ExibirMensagem("O emprestimo foi excluída com sucesso!", ConsoleColor.Green);
         }
 
         public void VisualizarEmprestimos(bool exibirTitulo)
@@ -124,7 +164,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine();
             Console.WriteLine(
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
+                "Id", "Titulo", "Cor", "Ano de publicação"
             );
             Revista[] revistasCadastradas = repositorioRevista.SelecionarRevistas();
             for (int i = 0; i < revistasCadastradas.Length; i++)
@@ -148,21 +188,13 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 
             VisualizarRevistas();
 
-            Console.Write("Digite o ID do membro que realizou o empréstimo: ");
+            Console.Write("Digite o ID da revista que realizou o empréstimo: ");
             int idRevista = Convert.ToInt32(Console.ReadLine()!.Trim());
-
-            Console.Write("Digite a data do empréstimo: ");
-            DateTime dataEmprestimo = Convert.ToDateTime(Console.ReadLine()!.Trim());
-
-            Console.Write("Digite a situação do empréstimo: ");
-            string situacao = Console.ReadLine()!.Trim();
-
 
             Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idAmigo);
             Revista revistaSelecionada = repositorioRevista.SelecionarRevistaPorId(idRevista);
 
-
-            Emprestimo novaEmprestimo = new Emprestimo(amigoSelecionado, revistaSelecionada, dataEmprestimo, situacao);
+            Emprestimo novaEmprestimo = new Emprestimo(amigoSelecionado, revistaSelecionada);
 
             return novaEmprestimo;
         }

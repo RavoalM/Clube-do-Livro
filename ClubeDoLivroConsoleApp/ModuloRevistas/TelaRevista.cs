@@ -59,8 +59,9 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.Write("Digite o ID da revista que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Revista revistaEditada = ObterDadosRevista();
 
+
+            Revista revistaEditada = ObterDadosRevista();
 
             bool conseguiuEditar = repositorioRevista.EditarRevista(idSelecionado, revistaEditada);
 
@@ -163,9 +164,6 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.Write("Digite o ano de publicação da revista: ");
             int AnoPublicacao = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Console.Write("Digite o status de emprestimo da revista: ");
-            string statusEmprestimo = Console.ReadLine()!.Trim();
-
             VisualizarCaixas();
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
@@ -173,7 +171,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
             Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idCaixa);
 
-            Revista novaRevista = new Revista(titulo, numeroEdicao, AnoPublicacao, statusEmprestimo, caixaSelecionada);
+            Revista novaRevista = new Revista(titulo, numeroEdicao, AnoPublicacao, caixaSelecionada);
 
             return novaRevista;
         }

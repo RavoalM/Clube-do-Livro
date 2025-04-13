@@ -90,9 +90,9 @@ namespace ClubeDoLivroConsoleApp
                     {
                         case '1': telaEmprestimo.CadastrarEmprestimo(); break;
 
-                        case '2':  break;
+                        case '2': telaEmprestimo.EditarEmprestimo(); break;
 
-                        case '3':  break;
+                        case '3': telaEmprestimo.ExcluirEmprestimo(); break;
 
                         case '4': telaEmprestimo.VisualizarEmprestimos(true); break;
 

@@ -19,7 +19,7 @@ namespace ClubeDoLivroConsoleApp.Gerais
             Console.WriteLine(" |                        ||                      |");
             Console.WriteLine(" |                        ||                      |");
             Console.WriteLine(" |                        ||                      |");
-            Console.WriteLine(" |        SEJA BEM VINDO AO CLUBE DO LIVRO!!!     |");
+            Console.WriteLine(" |       SEJA BEM VINDO AO CLUBE DO LIVRO!!!      |");
             Console.WriteLine(" |                        ||                      |");
             Console.WriteLine(" |                        ||                      |");
             Console.WriteLine(" |                        ||                      |");

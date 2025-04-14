@@ -25,6 +25,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
                 else if (revistas[i].Id == idRevista)
                 {
+
                     revistas[i].Titulo = revistaEditada.Titulo;
                     revistas[i].NumeroEdicao = revistaEditada.NumeroEdicao;
                     revistas[i].AnoPublicacao = revistaEditada.AnoPublicacao;

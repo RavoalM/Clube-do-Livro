@@ -59,8 +59,8 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.Write("Digite o ID da revista que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Revista revistaAntiga = repositorioRevista.SelecionarRevistaPorId(idSelecionado);
-            Caixa caixaAntiga = revistaAntiga.Caixa;
+            Revista revistaOriginal = repositorioRevista.SelecionarRevistaPorId(idSelecionado);
+            Caixa caixaAntiga = revistaOriginal.Caixa;
 
             Console.WriteLine();
 
@@ -72,8 +72,8 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
             if (caixaAntiga != caixaEditada)
             {
-                caixaAntiga.RemoverRevista(revistaAntiga);
-                caixaEditada.AdicionarRevista(revistaEditada);
+                caixaAntiga.RemoverRevista(revistaOriginal);
+                caixaEditada.AdicionarRevista(revistaOriginal);
             }
 
             Console.WriteLine();

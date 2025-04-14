@@ -18,5 +18,16 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             DataEmprestimo = DateTime.Now;
             Situacao = "Aberta";
         }
+
+        public DateTime ObterDataDevolucao()
+        {
+            return DataEmprestimo.AddDays(Revista.Caixa.DiasDeEmprestimo);
+        }
+
+        public void RegistrarDevolucao()
+        {
+            Situacao = "Concluído";
+            Revista.Devolver();
+        }
     }
 }

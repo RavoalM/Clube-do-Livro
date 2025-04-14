@@ -8,7 +8,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
         public string Nome;
         public string Responsavel;
         public string Telefone;
-        public Emprestimo Emprestimo;
+        public Emprestimo[] Emprestimos;
 
         public Amigo(string nome, string responsavel, string telefone)
         {
@@ -89,7 +89,10 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             return erros;
         }
 
-
+        public Emprestimo[] ObterEmprestimos()
+        {
+            return Emprestimos;
+        }
 
     }
 }

@@ -11,7 +11,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
         public void CadastrarEmprestimo(Emprestimo novoEmprestimo)
         {
             novoEmprestimo.Id = GeradorIds.GerarIdEmprestimo();
-
+            novoEmprestimo.Revista.Emprestar();
             emprestimos[contadorEmprestimos++] = novoEmprestimo;
         }
 

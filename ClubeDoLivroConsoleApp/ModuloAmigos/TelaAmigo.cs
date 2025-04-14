@@ -1,14 +1,17 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
     public class TelaAmigo
     {
         public RepositorioAmigo repositorioAmigo;
+        public RepositorioEmprestimo repositorioEmprestimo;
 
-        public TelaAmigo(RepositorioAmigo repositorioAmigo)
+        public TelaAmigo(RepositorioAmigo repositorioAmigo, RepositorioEmprestimo repositorioEmprestimo)
         {
             this.repositorioAmigo = repositorioAmigo;
+            this.repositorioEmprestimo = repositorioEmprestimo;
         }
 
         public char ApresentarMenu()
@@ -22,7 +25,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Console.WriteLine("4 - Visualização de Amigo");
             Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
-
+ 
             Console.Write("Digite um opção válida: ");
             char opcaoEscolhida = Console.ReadLine()[0];
 
@@ -115,7 +118,6 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Notificador.ExibirMensagem("O membro foi excluído com sucesso!", ConsoleColor.Green);
         }
 
-
         public void VisualizarAmigos(bool exibirTitulo)
         {
             if (exibirTitulo)
@@ -152,6 +154,35 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
+        public void VisualizarEmprestimos()
+        {
+            Console.WriteLine("Visualizando Empréstimos...");
+            Console.WriteLine("--------------------------------------------");
+
+
+            Console.WriteLine();
+
+            Console.WriteLine(
+                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20}",
+                "Id", "Amigo", "Revista", "Data de Empréstimo", "Situação"
+            );
+
+            Emprestimo[] emprestimosCadastrados = repositorioEmprestimo.SelecionarEmprestimos();
+
+            for (int i = 0; i < emprestimosCadastrados.Length; i++)
+            {
+                Emprestimo e = emprestimosCadastrados[i];
+
+                if (e == null) continue;
+
+                Console.WriteLine(
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20}",
+                     e.Id, e.Amigo.Nome, e.Revista.Titulo, e.DataEmprestimo.ToShortDateString(), e.Situacao
+                );
+            }
+
+            Console.WriteLine();
+        }
 
         public void ExibirCabecalho()
         {

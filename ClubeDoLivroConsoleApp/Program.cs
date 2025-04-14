@@ -16,7 +16,7 @@ namespace ClubeDoLivroConsoleApp
             RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
 
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
-            TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo);
+            TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo);
 
@@ -95,6 +95,8 @@ namespace ClubeDoLivroConsoleApp
                         case '3': telaEmprestimo.ExcluirEmprestimo(); break;
 
                         case '4': telaEmprestimo.VisualizarEmprestimos(true); break;
+
+                        case '5': telaEmprestimo.RegistrarDevolucao(); break;
 
                         default: break;
                     }

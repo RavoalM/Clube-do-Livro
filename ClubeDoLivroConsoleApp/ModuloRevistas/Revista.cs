@@ -19,6 +19,17 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             StatusEmprestimo = "Disponivel";
             Caixa = caixa;
         }
-
+        public void Emprestar()
+        {
+            StatusEmprestimo = "Emprestada";
+        }
+        public void Devolver()
+        {
+            StatusEmprestimo = "Disponível";
+        }
+        public void Reservar()
+        {
+            StatusEmprestimo = "Reservada";
+        }
     }
 }

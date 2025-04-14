@@ -186,7 +186,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine();
             Console.WriteLine(
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                "Id", "Titulo", "Cor", "Ano de publicação"
+                "Id", "Titulo", "Numero da Edição", "Ano de publicação"
             );
             Revista[] revistasCadastradas = repositorioRevista.SelecionarRevistas();
             for (int i = 0; i < revistasCadastradas.Length; i++)

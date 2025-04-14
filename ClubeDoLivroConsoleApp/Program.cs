@@ -17,7 +17,7 @@ namespace ClubeDoLivroConsoleApp
 
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
-            TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
+            TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa, repositorioRevista);
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo);
 
             TelaPrincipal.Intruducao();
@@ -42,6 +42,8 @@ namespace ClubeDoLivroConsoleApp
 
                         case '4': telaAmigo.VisualizarAmigos(true); break;
 
+                        case '5': telaAmigo.VisualizarEmprestimosAmigo(); break;
+
                         default: break;
                     }
                 }
@@ -59,6 +61,8 @@ namespace ClubeDoLivroConsoleApp
                         case '3': telaCaixa.ExcluirCaixa(); break;
 
                         case '4': telaCaixa.VisualizarCaixas(true); break;
+
+                        case '5': telaCaixa.VisualizarRevistasNaCaixa(); break;
 
                         default: break;
                     }

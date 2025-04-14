@@ -50,6 +50,26 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             return false;
         }
 
+        public void VerificarEmprestimosAtrasados(Emprestimo[] emprestimosRegistrados)
+        {
+            foreach (Emprestimo e in emprestimosRegistrados)
+            {
+                if (e == null)
+                    continue;
+
+                if (e.Situacao == "Concluído")
+                    continue;
+
+                if (DateTime.Now > e.ObterDataDevolucao())
+                {
+                    ConsoleColor Red;
+                    e.Situacao = "ATRASADO";
+                    Console.ResetColor();
+                }
+
+            }
+        }
+
         public Emprestimo SelecionarEmprestimoPorId(int idEmprestimo)
         {
             for (int i = 0; i < emprestimos.Length; i++)

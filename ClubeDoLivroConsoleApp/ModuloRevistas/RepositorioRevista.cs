@@ -10,7 +10,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
         public void CadastrarRevista(Revista novaRevista)
         {
             novaRevista.Id = GeradorIds.GerarIdRevista();
-
+            novaRevista.Caixa.AdicionarRevista(novaRevista);
             revistas[contadorRevistas++] = novaRevista;
         }
 
@@ -29,7 +29,6 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                     revistas[i].NumeroEdicao = revistaEditada.NumeroEdicao;
                     revistas[i].AnoPublicacao = revistaEditada.AnoPublicacao;
                     revistas[i].StatusEmprestimo = revistaEditada.StatusEmprestimo;
-                    revistas[i].Caixa = revistaEditada.Caixa;
 
                     return true;
                 }
@@ -38,14 +37,15 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             return false;
         }
 
-        public bool ExcluirRevista(int idCaixa)
+        public bool ExcluirRevista(int idRevistas)
         {
             for (int i = 0; i < revistas.Length; i++)
             {
                 if (revistas[i] == null) continue;
 
-                else if (revistas[i].Id == idCaixa)
+                else if (revistas[i].Id == idRevistas)
                 {
+                    revistas[i].Caixa.RemoverRevista(revistas[i]);
                     revistas[i] = null;
 
                     return true;

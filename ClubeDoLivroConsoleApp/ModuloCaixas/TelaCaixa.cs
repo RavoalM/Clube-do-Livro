@@ -1,14 +1,17 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
     public class TelaCaixa
     {
         public RepositorioCaixa repositorioCaixa;
+        public RepositorioRevista repositorioRevista;
 
-        public TelaCaixa(RepositorioCaixa repositorioCaixa)
+        public TelaCaixa(RepositorioCaixa repositorioCaixa, RepositorioRevista repositorioRevista)
         {
             this.repositorioCaixa = repositorioCaixa;
+            this.repositorioRevista = repositorioRevista;
         }
 
         public char ApresentarMenu()
@@ -20,6 +23,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             Console.WriteLine("2 - Edição de Caixa");
             Console.WriteLine("3 - Exclusão de Caixa");
             Console.WriteLine("4 - Visualização de Caixa");
+            Console.WriteLine("5 - Visualização de Revistas na Caixa");
             Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
 
@@ -114,6 +118,39 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
                 );
             }
 
+            Console.WriteLine();
+
+            Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
+        }
+
+        public void VisualizarRevistasNaCaixa()
+        {
+            VisualizarCaixas(false);
+
+            Console.Write("Digite o ID da caixa que deseja selecionar: ");
+            int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
+
+            Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idCaixa);
+
+            Console.WriteLine("Visualizando Revistas...");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine();
+            Console.WriteLine(
+                "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
+                "Id", "Titulo", "Numero de Edicao", "Ano de publicação"
+            );
+
+            Revista[] revistasCadastradas = caixaSelecionada.ObterRevistas();
+
+            for (int i = 0; i < revistasCadastradas.Length; i++)
+            {
+                Revista r = revistasCadastradas[i];
+                if (r == null) continue;
+                Console.WriteLine(
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
+                    r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao
+                );
+            }
             Console.WriteLine();
 
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);

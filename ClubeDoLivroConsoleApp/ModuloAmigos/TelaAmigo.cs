@@ -23,6 +23,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Console.WriteLine("2 - Edição de Amigo");
             Console.WriteLine("3 - Exclusão de Amigo");
             Console.WriteLine("4 - Visualização de Amigo");
+            Console.WriteLine("5 - Visualização de Empréstimos de Amigo");
             Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
  
@@ -154,11 +155,17 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
-        public void VisualizarEmprestimos()
+        public void VisualizarEmprestimosAmigo()
         {
+            VisualizarAmigos(false);
+
+            Console.Write("Digite o ID do membro que realizou o empréstimo: ");
+            int idAmigo = Convert.ToInt32(Console.ReadLine()!.Trim());
+
+            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idAmigo);
+
             Console.WriteLine("Visualizando Empréstimos...");
             Console.WriteLine("--------------------------------------------");
-
 
             Console.WriteLine();
 
@@ -167,11 +174,11 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
                 "Id", "Amigo", "Revista", "Data de Empréstimo", "Situação"
             );
 
-            Emprestimo[] emprestimosCadastrados = repositorioEmprestimo.SelecionarEmprestimos();
+            Emprestimo[] emprestimosDoAmigo = amigoSelecionado.ObterEmprestimos();
 
-            for (int i = 0; i < emprestimosCadastrados.Length; i++)
+            for (int i = 0; i < emprestimosDoAmigo.Length; i++)
             {
-                Emprestimo e = emprestimosCadastrados[i];
+                Emprestimo e = emprestimosDoAmigo[i];
 
                 if (e == null) continue;
 

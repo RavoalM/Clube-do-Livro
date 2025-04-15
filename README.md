@@ -30,8 +30,6 @@ Aqui no Clube do Livro, cuidamos com carinho dos membros, das caixas cheias de h
 
 - **Validação**: A maioria dos módulos não possui validação, e a validação do módulo de amigos está incompleta.
 <br><br>
-- **Visualização de Empréstimos**: A visualização dos empréstimos de um amigo específico não está funcionando corretamente.
-<br><br>
 - **Limitações**: As limitações esperadas não foram implementadas. Por exemplo, é possível cadastrar dois amigos com o mesmo empréstimo ou permitir que um amigo tenha múltiplos empréstimos simultaneamente.
 <br><br>
 - **Desafios**: Nenhum dos desafios propostos foi realizado.

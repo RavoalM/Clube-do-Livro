@@ -113,6 +113,14 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Console.Write("Digite o ID do membro que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
+            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
+
+            if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
+            {
+                Notificador.ExibirMensagem($"\nO membro ainda possui empréstimos em aberto e não pode ser excluído.", ConsoleColor.Red);
+                return;
+            }
+
             bool conseguiuExcluir = repositorioAmigo.ExcluirAmigo(idSelecionado);
 
             Console.WriteLine();

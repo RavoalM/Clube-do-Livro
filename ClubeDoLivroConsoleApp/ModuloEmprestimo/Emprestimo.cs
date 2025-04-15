@@ -19,6 +19,22 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Situacao = "Aberta";
         }
 
+        public string Validar()
+        {
+            string erros = "";
+
+            if (Amigo == null)
+            {
+                erros += "O campo 'Amigo' é obrigatório.\n";
+            }
+            if (Revista == null)
+            {
+                erros += "O campo 'Revista' é obrigatório.\n";
+            }
+            
+            return erros;
+        }
+
         public DateTime ObterDataDevolucao()
         {
             return DataEmprestimo.AddDays(Revista.Caixa.DiasDeEmprestimo);

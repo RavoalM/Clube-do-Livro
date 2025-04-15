@@ -1,4 +1,5 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
@@ -64,6 +65,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             return false;
         }
 
+
         public Amigo SelecionarAmigoPorId(int idAmigo)
         {
             for (int i = 0; i < amigos.Length; i++)
@@ -78,6 +80,25 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             }
 
             return null;
+        }
+
+        public bool VerificarEmprestimosAmigo(Amigo amigoEscolhido)
+        {
+            int emprestimos = 0;
+
+            if (amigoEscolhido.Emprestimos == null)
+                return false;
+
+            foreach (Emprestimo e in amigoEscolhido.Emprestimos)
+            {
+                if (e != null && e.Situacao != "Concluído")
+                    return true;
+            }
+
+            if (emprestimos > 0)
+                return true;
+            else
+                return false;
         }
 
         public Amigo[] SelecionarAmigos()

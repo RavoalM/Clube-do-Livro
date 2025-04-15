@@ -51,6 +51,26 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             return false;
         }
 
+
+        public bool VerificarEmprestimosAmigo(Amigo amigoEscolhido)
+        {
+            int emprestimos = 0;
+
+            if (amigoEscolhido.Emprestimos == null)
+                return false;
+
+            foreach (Emprestimo e in amigoEscolhido.Emprestimos)
+            {
+                if (e != null && e.Situacao != "Concluído")
+                    return true;
+            }
+
+            if (emprestimos > 0)
+                return true;
+            else
+                return false;
+        }
+
         public void VerificarEmprestimosAtrasados(Emprestimo[] emprestimosRegistrados)
         {
             foreach (Emprestimo e in emprestimosRegistrados)

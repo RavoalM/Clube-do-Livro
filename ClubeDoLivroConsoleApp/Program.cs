@@ -74,7 +74,8 @@ namespace ClubeDoLivroConsoleApp
 
                     switch (opcaoEscolhida)
                     {
-                        case '1': telaRevista.CadastraRevista(); break;
+                        case '1': telaRevista.CadastraRevista(); 
+                            break;
 
                         case '2': telaRevista.EditarRevista(); break;
 

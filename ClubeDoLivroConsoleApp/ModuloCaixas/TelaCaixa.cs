@@ -132,12 +132,13 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
             Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idCaixa);
 
+            Console.WriteLine();
             Console.WriteLine("Visualizando Revistas...");
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine();
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                "Id", "Titulo", "Numero de Edicao", "Ano de publicação"
+                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                "Id", "Titulo", "Numero de edição", "Ano de publicação", "Status de empréstimo"
             );
 
             Revista[] revistasCadastradas = caixaSelecionada.ObterRevistas();
@@ -147,8 +148,8 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
                 Revista r = revistasCadastradas[i];
                 if (r == null) continue;
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                    r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                    r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.StatusEmprestimo
                 );
             }
             Console.WriteLine();

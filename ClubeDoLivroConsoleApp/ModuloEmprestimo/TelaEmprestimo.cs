@@ -11,12 +11,14 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
         public RepositorioAmigo repositorioAmigo;
         public RepositorioRevista repositorioRevista;
         public RepositorioEmprestimo repositorioEmprestimo;
+        public RepositorioCaixa repositorioCaixa;
 
-        public TelaEmprestimo(RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo)
+        public TelaEmprestimo(RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo, RepositorioCaixa  repositorioCaixa)
         {
             this.repositorioEmprestimo = repositorioEmprestimo;
             this.repositorioAmigo = repositorioAmigo;
             this.repositorioRevista = repositorioRevista;
+            this.repositorioCaixa = repositorioCaixa;
         }
 
         public char ApresentarMenu()
@@ -179,23 +181,57 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine();
         }
 
-        public void VisualizarRevistas()
+        public void VisualizarRevistasNaCaixa()
         {
+            Console.WriteLine();
+            VisualizarCaixas();
+
+            Console.Write("Digite o ID da caixa que deseja selecionar: ");
+            int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
+
+            Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idCaixa);
+
+            Console.WriteLine();
             Console.WriteLine("Visualizando Revistas...");
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine();
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                "Id", "Titulo", "Numero da Edição", "Ano de publicação"
+                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                "Id", "Titulo", "Numero de edição", "Ano de publicação", "Status de empréstimo"
             );
-            Revista[] revistasCadastradas = repositorioRevista.SelecionarRevistas();
+
+            Revista[] revistasCadastradas = caixaSelecionada.ObterRevistas();
+
             for (int i = 0; i < revistasCadastradas.Length; i++)
             {
                 Revista r = revistasCadastradas[i];
                 if (r == null) continue;
                 Console.WriteLine(
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                    r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.StatusEmprestimo
+                );
+            }
+            Console.WriteLine();
+        }
+
+        public void VisualizarCaixas()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Visualizando Caixas...");
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine();
+            Console.WriteLine(
+                "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
+                "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
+            );
+            Caixa[] caixasCadastradas = repositorioCaixa.SelecionarCaixas();
+            for (int i = 0; i < caixasCadastradas.Length; i++)
+            {
+                Caixa c = caixasCadastradas[i];
+                if (c == null) continue;
+                Console.WriteLine(
                     "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                    r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao
+                    c.Id, c.Etiqueta, c.Cor, c.DiasDeEmprestimo
                 );
             }
             Console.WriteLine();
@@ -208,7 +244,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.Write("Digite o ID do membro que realizou o empréstimo: ");
             int idAmigo = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            VisualizarRevistas();
+            VisualizarRevistasNaCaixa();
 
             Console.Write("Digite o ID da revista que realizou o empréstimo: ");
             int idRevista = Convert.ToInt32(Console.ReadLine()!.Trim());

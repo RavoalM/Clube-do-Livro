@@ -164,11 +164,10 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
 
             Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idAmigo);
 
+            Console.WriteLine();
             Console.WriteLine("Visualizando Empréstimos...");
             Console.WriteLine("--------------------------------------------");
-
             Console.WriteLine();
-
             Console.WriteLine(
                 "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20}",
                 "Id", "Amigo", "Revista", "Data de Empréstimo", "Situação"
@@ -179,9 +178,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             for (int i = 0; i < emprestimosDoAmigo.Length; i++)
             {
                 Emprestimo e = emprestimosDoAmigo[i];
-
                 if (e == null) continue;
-
                 Console.WriteLine(
                     "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20}",
                      e.Id, e.Amigo.Nome, e.Revista.Titulo, e.DataEmprestimo.ToShortDateString(), e.Situacao
@@ -189,6 +186,8 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             }
 
             Console.WriteLine();
+
+            Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
         public void ExibirCabecalho()

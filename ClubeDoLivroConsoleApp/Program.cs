@@ -18,7 +18,7 @@ namespace ClubeDoLivroConsoleApp
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa, repositorioRevista);
-            TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo);
+            TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
 
             TelaPrincipal.Intruducao();
 

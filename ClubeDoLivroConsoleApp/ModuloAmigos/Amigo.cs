@@ -1,4 +1,5 @@
 ﻿using ClubeDoLivroConsoleApp.ModuloEmprestimo;
+using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
@@ -87,6 +88,18 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             }
 
             return erros;
+        }
+
+        public void AdicionarEmpréstimo(Emprestimo emprestimo)
+        {
+            for (int i = 0; i < Emprestimos.Length; i++)
+            {
+                if (Emprestimos[i] == null)
+                {
+                    Emprestimos[i] = emprestimo;
+                    return;
+                }
+            }
         }
 
         public Emprestimo[] ObterEmprestimos()

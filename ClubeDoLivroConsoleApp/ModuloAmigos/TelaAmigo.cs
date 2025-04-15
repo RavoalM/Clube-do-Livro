@@ -169,8 +169,8 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine();
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20}",
-                "Id", "Amigo", "Revista", "Data de Empréstimo", "Situação"
+                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20} | {5, -20}",
+                "Id", "Amigo", "Revista", "Data de Empréstimo", "Data de Devolução", "Situação"
             );
 
             Emprestimo[] emprestimosDoAmigo = amigoSelecionado.ObterEmprestimos();
@@ -180,9 +180,9 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
                 Emprestimo e = emprestimosDoAmigo[i];
                 if (e == null) continue;
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20}",
-                     e.Id, e.Amigo.Nome, e.Revista.Titulo, e.DataEmprestimo.ToShortDateString(), e.Situacao
-                );
+                   "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20} | {5, -20}",
+                    e.Id, e.Amigo.Nome, e.Revista.Titulo, e.DataEmprestimo.ToShortDateString(), e.ObterDataDevolucao().ToShortDateString(), e.Situacao
+               );
             }
 
             Console.WriteLine();

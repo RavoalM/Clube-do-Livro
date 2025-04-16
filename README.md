@@ -18,7 +18,7 @@ Aqui no Clube do Livro, cuidamos com carinho dos membros, das caixas cheias de h
 <br><br>
 - **Interface Amigável**: Pensado com carinho, o programa tem uma interface clara e acolhedora, tornando o uso mais leve e intuitivo — ideal para o clima de um clube literário!
 <br><br>
-<!-- Conferir a situação do trabalho incompleto para o GIF -->
+![](https://i.imgur.com/gyPC2Uz.gif) 
 
 ## Tecnologias
 
@@ -28,8 +28,6 @@ Aqui no Clube do Livro, cuidamos com carinho dos membros, das caixas cheias de h
 
 ![](https://pa1.aminoapps.com/7151/c629adde8fef30396d6290b2c02124082a4cc2b8r1-678-382_hq.gif) 
 
-- **Read.me**: Atualizar o Readme com o gif do projeto em prática.
-<br><br>
 - **Desafios**: Nenhum dos desafios propostos foi realizado.
 <br><br>
 

@@ -72,6 +72,14 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Console.WriteLine("Editando Membro...");
             Console.WriteLine("--------------------------------------------");
 
+            Amigo[] amigos = repositorioAmigo.SelecionarAmigos();
+
+            if (!amigos.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há membros cadastrados para edição.", ConsoleColor.Yellow);
+                return;
+            }
+
             VisualizarAmigos(false);
 
             Console.Write("Digite o ID do membro que deseja selecionar: ");
@@ -107,6 +115,14 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
 
             Console.WriteLine("Excluindo Membro...");
             Console.WriteLine("--------------------------------------------");
+
+            Amigo[] amigos = repositorioAmigo.SelecionarAmigos();
+
+            if (!amigos.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há membros cadastrados para exclusão.", ConsoleColor.Yellow);
+                return;
+            }
 
             VisualizarAmigos(false);
 

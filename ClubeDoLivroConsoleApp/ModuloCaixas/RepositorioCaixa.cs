@@ -1,4 +1,5 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
@@ -49,6 +50,35 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
             return false;
         }
+
+        public bool VerificarEtiquetas(Caixa caixaVerificar)
+        {
+            for (int i = 0; i < caixas.Length; i++)
+            {
+                if (caixas[i] == null)
+                    continue;
+
+                if (caixaVerificar.Etiqueta == caixas[i].Etiqueta)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool VerificarRevistasCaixa(Caixa caixaEscolhida)
+        {
+            if (caixaEscolhida.Revistas == null)
+                return false;
+
+            foreach (Revista r in caixaEscolhida.Revistas)
+            {
+                if (r != null)
+                    return true; 
+            }
+
+            return false; 
+        }
+
 
         public Caixa SelecionarCaixaPorId(int idCaixa)
         {

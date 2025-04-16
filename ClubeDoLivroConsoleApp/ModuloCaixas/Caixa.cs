@@ -17,6 +17,38 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             DiasDeEmprestimo = diasDeEmprestimo;
         }
 
+        public string Validar()
+        {
+            string erros = "";
+
+            if (string.IsNullOrWhiteSpace(Etiqueta))
+            {
+                erros += "O campo 'Etiqueta' é obrigatório.\n";
+            }
+
+            if (Etiqueta.Length > 50)
+            {
+                erros += "O campo 'Etiqueta' não pode ter mais que 50 caracteres.\n";
+            }
+
+            if (string.IsNullOrWhiteSpace(Cor))
+            {
+                erros += "O campo 'Cor' é obrigatório.\n";
+            }
+
+            if (string.IsNullOrWhiteSpace(DiasDeEmprestimo.ToString()))
+            {
+                erros += "O campo 'DiasDeEmprestimo' é obrigatório.\n";
+            }
+
+            if (DiasDeEmprestimo != 3 && DiasDeEmprestimo != 7)
+            {
+                erros += "O campo 'Dias de Emprestimo' está inválido! Verifique novamente a raridade da caixa!\n";
+            }
+
+            return erros;
+        }
+
         public void AdicionarRevista(Revista revista)
         {
             for (int i = 0; i < Revistas.Length; i++)

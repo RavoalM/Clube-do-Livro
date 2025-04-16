@@ -1,4 +1,5 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
 
 namespace ClubeDoLivroConsoleApp.ModuloRevistas
@@ -7,11 +8,13 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
     {
         public RepositorioCaixa repositorioCaixa;
         public RepositorioRevista repositorioRevista;
+        public RepositorioAmigo repositorioAmigo;
 
-        public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa)
+        public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa, RepositorioAmigo repositorioAmigo)
         {
             this.repositorioCaixa = repositorioCaixa;
             this.repositorioRevista = repositorioRevista;
+            this.repositorioAmigo = repositorioAmigo;
         }
 
         public char ApresentarMenu()
@@ -41,6 +44,22 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
             Revista novaRevista = ObterDadosRevista();
 
+            string erros = novaRevista.Validar();
+
+            if (repositorioRevista.VerificarIndenfidicacaoRevista(novaRevista))
+            {
+                Notificador.ExibirMensagem("Esta titulo já pertence a outra revista.", ConsoleColor.Red);
+                CadastraRevista();
+                return;
+            }
+
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+                CadastraRevista();
+                return;
+            }
+
             repositorioRevista.CadastrarRevista(novaRevista);
 
             Console.WriteLine();
@@ -53,6 +72,14 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
             Console.WriteLine("Editando Revista...");
             Console.WriteLine("--------------------------------------------");
+
+            Revista[] revistas = repositorioRevista.SelecionarRevistas();
+
+            if (!revistas.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há revistas cadastradas para edição.", ConsoleColor.Yellow);
+                return;
+            }
 
             VisualizarRevistas(false);
 
@@ -87,10 +114,26 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.WriteLine("Excluindo revista...");
             Console.WriteLine("--------------------------------------------");
 
+            Revista[] revistas = repositorioRevista.SelecionarRevistas();
+
+            if (!revistas.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há revistas cadastradas para exclusão.", ConsoleColor.Yellow);
+                return;
+            }
+
             VisualizarRevistas(false);
 
             Console.Write("Digite o ID da revista que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
+
+            if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
+            {
+                Notificador.ExibirMensagem("A revista ainda está em um empréstimos em aberto e não pode ser excluída.", ConsoleColor.Red);
+                return;
+            }
 
             bool conseguiuExcluir = repositorioRevista.ExcluirRevista(idSelecionado);
 
@@ -111,7 +154,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20} | {5, -20}",
+                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
                 "Id", "Titulo", "Numero da Edicao", "Ano de Publicacao", "Status Emprestimo", "Caixa"
             );
 
@@ -124,7 +167,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                 if (r == null) continue;
 
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20} | {5, -20}",
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
                     r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.StatusEmprestimo, r.Caixa.Etiqueta
                 );
             }
@@ -170,10 +213,12 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             string titulo = Console.ReadLine()!.Trim();
 
             Console.Write("Digite o numero da edição da revista: ");
-            int numeroEdicao = Convert.ToInt32(Console.ReadLine()!.Trim());
+            string numeroEdicao = Console.ReadLine()!.Trim();
 
             Console.Write("Digite o ano de publicação da revista: ");
             int AnoPublicacao = Convert.ToInt32(Console.ReadLine()!.Trim());
+
+            Caixa[] caixas = repositorioCaixa.SelecionarCaixas();
 
             VisualizarCaixas();
 

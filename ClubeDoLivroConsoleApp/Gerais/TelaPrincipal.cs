@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ClubeDoLivroConsoleApp.Gerais
+﻿namespace ClubeDoLivroConsoleApp.Gerais
 {
     public class TelaPrincipal
     {

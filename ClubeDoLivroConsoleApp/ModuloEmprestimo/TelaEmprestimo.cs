@@ -3,7 +3,6 @@ using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 
-
 namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 {
     public class TelaEmprestimo
@@ -84,6 +83,14 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine("Editando Empréstimo...");
             Console.WriteLine("--------------------------------------------");
 
+            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+
+            if (!emprestimos.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há empréstimos cadastrados para edição.", ConsoleColor.Yellow);
+                return;
+            }
+
             VisualizarEmprestimos(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
@@ -114,6 +121,14 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine("Excluindo Emprestimos...");
             Console.WriteLine("--------------------------------------------");
 
+            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+
+            if (!emprestimos.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há empréstimos cadastrados para exclusão.", ConsoleColor.Yellow);
+                return;
+            }
+
             VisualizarEmprestimos(false);
 
             Console.Write("Digite o ID do emprestimo que deseja selecionar: ");
@@ -123,7 +138,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 
             if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
             {
-                Notificador.ExibirMensagem($"\nO empréstimo não pode ser exclúido pois ainda está aberto.", ConsoleColor.Red);
+                Notificador.ExibirMensagem("O empréstimo não pode ser exclúido pois ainda está aberto.", ConsoleColor.Red);
                 return;
             }
 
@@ -146,7 +161,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20} | {5, -20}",
+                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
                 "Id", "Amigo", "Revista", "Data de Empréstimo", "Data de Devolução", "Situação"
             );
 
@@ -159,7 +174,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 if (e == null) continue;
 
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20} | {5, -20}",
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
                      e.Id, e.Amigo.Nome, e.Revista.Titulo, e.DataEmprestimo.ToShortDateString(), e.ObterDataDevolucao().ToShortDateString(), e.Situacao
                 );
             }
@@ -176,6 +191,14 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 
             Console.WriteLine("Devolução Empréstimo...");
             Console.WriteLine("--------------------------------------------");
+
+            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+
+            if (!emprestimos.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há empréstimos cadastrados para haver devoluções.", ConsoleColor.Yellow);
+                return;
+            }
 
             VisualizarEmprestimos(false);
 
@@ -223,6 +246,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
         {
             bool conseguiuSelecionar = true;
             Console.WriteLine();
+
             VisualizarCaixas();
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
@@ -241,7 +265,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine();
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -25}",
                 "Id", "Titulo", "Numero de edição", "Ano de publicação", "Status de empréstimo"
             );
 
@@ -252,7 +276,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 Revista r = revistasCadastradas[i];
                 if (r == null) continue;
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -25}",
                     r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.StatusEmprestimo
                 );
             }
@@ -287,6 +311,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 
         public Emprestimo ObterDadosEmprestimo()
         {
+
             VisualizarAmigos();
 
             Console.Write("Digite o ID do membro que realizou o empréstimo: ");

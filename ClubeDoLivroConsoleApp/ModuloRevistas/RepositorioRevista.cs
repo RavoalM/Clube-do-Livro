@@ -56,6 +56,20 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             return false;
         }
 
+        public bool VerificarIndenfidicacaoRevista(Revista revistaVerificar)
+        {
+            for (int i = 0; i < revistas.Length; i++)
+            {
+                if (revistas[i] == null)
+                    continue;
+
+                if (revistaVerificar.Titulo == revistas[i].Titulo && revistaVerificar.NumeroEdicao == revistas[i].NumeroEdicao)
+                    return true;
+            }
+
+            return false;
+        }
+
         public Revista SelecionarRevistaPorId(int idRevistas)
         {
             for (int i = 0; i < revistas.Length; i++)

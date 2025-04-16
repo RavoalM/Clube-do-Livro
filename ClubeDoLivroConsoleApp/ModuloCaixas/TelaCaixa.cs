@@ -42,6 +42,22 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
             Caixa novaCaixa = ObterDadosCaixa();
 
+            string erros = novaCaixa.Validar();
+
+            if (repositorioCaixa.VerificarEtiquetas(novaCaixa))
+            {
+                Notificador.ExibirMensagem("Esta etiqueta já pertence a outra caixa.", ConsoleColor.Red);
+                CadastrarCaixa();
+                return;
+            }
+
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+                CadastrarCaixa();
+                return;
+            }
+
             repositorioCaixa.CadastrarCaixa(novaCaixa);
 
             Console.WriteLine();
@@ -55,13 +71,36 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             Console.WriteLine("Editando Caixa...");
             Console.WriteLine("--------------------------------------------");
 
+            Caixa[] caixas = repositorioCaixa.SelecionarCaixas();
+
+            if (!caixas.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há caixas cadastradas para edição.", ConsoleColor.Yellow);
+                return;
+            }
+
             VisualizarCaixas(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
             Caixa caixaEditada = ObterDadosCaixa();
-        
+
+            string erros = caixaEditada.Validar();
+
+            if (repositorioCaixa.VerificarEtiquetas(caixaEditada))
+            {
+                Notificador.ExibirMensagem("Esta etiqueta já pertence a outra caixa.", ConsoleColor.Red);
+                CadastrarCaixa();
+                return;
+            }
+
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+                EditarCaixa();
+                return;
+            }
 
             bool conseguiuEditar = repositorioCaixa.EditarCaixa(idSelecionado, caixaEditada);
 
@@ -76,10 +115,26 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             Console.WriteLine("Excluindo Caixa...");
             Console.WriteLine("--------------------------------------------");
 
+            Caixa[] caixas = repositorioCaixa.SelecionarCaixas();
+
+            if (!caixas.Any(a => a != null))
+            {
+                Notificador.ExibirMensagem("Não há caixas cadastradas para exclusão.", ConsoleColor.Yellow);
+                return;
+            }
+
             VisualizarCaixas(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+            Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idSelecionado);
+
+            if (repositorioCaixa.VerificarRevistasCaixa(caixaSelecionada))
+            {
+                Notificador.ExibirMensagem("A caixa possui revistas nela e não pode ser excluída.", ConsoleColor.Red);
+                return;
+            }
 
             bool conseguiuExcluir = repositorioCaixa.ExcluirCaixa(idSelecionado);
 
@@ -137,7 +192,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine();
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -25}",
                 "Id", "Titulo", "Numero de edição", "Ano de publicação", "Status de empréstimo"
             );
 
@@ -148,7 +203,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
                 Revista r = revistasCadastradas[i];
                 if (r == null) continue;
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -25}",
                     r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.StatusEmprestimo
                 );
             }

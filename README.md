@@ -24,7 +24,7 @@ Aqui no Clube do Livro, cuidamos com carinho dos membros, das caixas cheias de h
 
 [![Tecnologias](https://skillicons.dev/icons?i=git,github,visualstudio,cs,dotnet)](https://skillicons.dev)
 
-## Ausensias/bugs
+## Ausensias
 
 ![](https://pa1.aminoapps.com/7151/c629adde8fef30396d6290b2c02124082a4cc2b8r1-678-382_hq.gif) 
 

@@ -28,9 +28,7 @@ Aqui no Clube do Livro, cuidamos com carinho dos membros, das caixas cheias de h
 
 ![](https://pa1.aminoapps.com/7151/c629adde8fef30396d6290b2c02124082a4cc2b8r1-678-382_hq.gif) 
 
-- **Validação**: A maioria dos módulos não possui validação, e a validação do módulo de amigos está incompleta.
-<br><br>
-- **Limitações**: As limitações esperadas não foram implementadas. Por exemplo, é possível cadastrar dois amigos com o mesmo empréstimo ou permitir que um amigo tenha múltiplos empréstimos simultaneamente.
+- **Read.me**: Atualizar o Readme com o gif do projeto em prática.
 <br><br>
 - **Desafios**: Nenhum dos desafios propostos foi realizado.
 <br><br>

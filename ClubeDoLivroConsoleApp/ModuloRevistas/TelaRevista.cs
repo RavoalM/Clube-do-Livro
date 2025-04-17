@@ -128,8 +128,15 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
             Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
+            Revista revistaSelecionada = repositorioRevista.SelecionarRevistaPorId(idSelecionado);
 
             if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
+            {
+                Notificador.ExibirMensagem("A revista ainda está em um empréstimos em aberto e não pode ser excluída.", ConsoleColor.Red);
+                return;
+            }
+
+            if (repositorioRevista.VerificarRevistaReservada(revistaSelecionada))
             {
                 Notificador.ExibirMensagem("A revista ainda está em um empréstimos em aberto e não pode ser excluída.", ConsoleColor.Red);
                 return;

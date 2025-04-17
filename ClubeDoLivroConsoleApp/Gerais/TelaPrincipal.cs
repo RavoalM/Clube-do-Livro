@@ -42,6 +42,7 @@
             Console.WriteLine("2 - Controle de Caixas");
             Console.WriteLine("3 - Controle de Revistas");
             Console.WriteLine("4 - Controle de Empréstimos");
+            Console.WriteLine("5 - Controle de Reservas");
 
             Console.WriteLine();
 

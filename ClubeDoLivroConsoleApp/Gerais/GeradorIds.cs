@@ -6,6 +6,8 @@
         public static int IdCaixa;
         public static int IdRevista;
         public static int IdEmprestimo;
+        public static int idReserva;
+        public static int IdMulta;
 
         public static int GerarIdAmigo()
         {
@@ -25,6 +27,16 @@
         public static int GerarIdEmprestimo()
         {
             return ++IdEmprestimo;
+        }
+
+        public static int GerarIdReserva()
+        {
+            return ++idReserva;
+        }
+
+        public static int GerarIdMulta()
+        {
+            return ++IdMulta;
         }
     }
 }

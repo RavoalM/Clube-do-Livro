@@ -3,6 +3,7 @@ using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
+using ClubeDoLivroConsoleApp.ModuloReservas;
 
 namespace ClubeDoLivroConsoleApp
 {
@@ -14,11 +15,13 @@ namespace ClubeDoLivroConsoleApp
             RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
             RepositorioRevista repositorioRevista = new RepositorioRevista();
             RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
+            RepositorioReserva repositorioReserva = new RepositorioReserva();
 
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa, repositorioAmigo);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa, repositorioRevista);
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
+            TelaReserva telaReserva = new TelaReserva(repositorioReserva ,repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
 
             TelaPrincipal.Intruducao();
 
@@ -74,7 +77,8 @@ namespace ClubeDoLivroConsoleApp
 
                     switch (opcaoEscolhida)
                     {
-                        case '1': telaRevista.CadastraRevista(); 
+                        case '1':
+                            telaRevista.CadastraRevista();
                             break;
 
                         case '2': telaRevista.EditarRevista(); break;
@@ -102,6 +106,24 @@ namespace ClubeDoLivroConsoleApp
                         case '4': telaEmprestimo.VisualizarEmprestimos(true); break;
 
                         case '5': telaEmprestimo.RegistrarDevolucao(); break;
+
+                        default: break;
+                    }
+                }
+
+                if (opcaoPrincipal == '5')
+                {
+                    char opcaoEscolhida = telaReserva.ApresentarMenu();
+
+                    switch (opcaoEscolhida)
+                    {
+                        case '1': telaReserva.CadastrarReserva(); break;
+
+                        case '2': telaReserva.CancelarReserva(); break;
+
+                        case '3': telaReserva.EmprestarRevistaReservada(); break;
+
+                        case '4': telaReserva.VisualizarReservas(true); break;
 
                         default: break;
                     }

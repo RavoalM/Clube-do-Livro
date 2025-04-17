@@ -70,6 +70,14 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             return false;
         }
 
+        public bool VerificarRevistaReservada(Revista revistaEscolhida)
+        {
+            if (revistaEscolhida.StatusEmprestimo == "Reservada")
+                return true;
+            else
+                return false;
+        }
+
         public Revista SelecionarRevistaPorId(int idRevistas)
         {
             for (int i = 0; i < revistas.Length; i++)

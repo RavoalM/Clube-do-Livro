@@ -1,19 +1,22 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
+using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 
-namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
+namespace ClubeDoLivroConsoleApp.ModuloReservas
 {
-    public class TelaEmprestimo
+    public class TelaReserva
     {
+        public RepositorioReserva repositorioReserva;
         public RepositorioAmigo repositorioAmigo;
         public RepositorioRevista repositorioRevista;
         public RepositorioEmprestimo repositorioEmprestimo;
         public RepositorioCaixa repositorioCaixa;
 
-        public TelaEmprestimo(RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo, RepositorioCaixa repositorioCaixa)
+        public TelaReserva(RepositorioReserva repositorioReserva, RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo, RepositorioCaixa repositorioCaixa)
         {
+            this.repositorioReserva = repositorioReserva;
             this.repositorioEmprestimo = repositorioEmprestimo;
             this.repositorioAmigo = repositorioAmigo;
             this.repositorioRevista = repositorioRevista;
@@ -25,11 +28,10 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             ExibirCabecalho();
 
             Console.WriteLine("Escolha a operação desejada:");
-            Console.WriteLine("1 - Cadastro de Empréstimo");
-            Console.WriteLine("2 - Edição de Empréstimo");
-            Console.WriteLine("3 - Exclusão de Empréstimo");
-            Console.WriteLine("4 - Visualização de Empréstimo");
-            Console.WriteLine("5 - Registrar Devolução");
+            Console.WriteLine("1 - Cadastro de Reservas");
+            Console.WriteLine("2 - Cancelamento de Reservas");
+            Console.WriteLine("3 - Emprestar revista Reservada");
+            Console.WriteLine("4 - Visualização de Reservas");
             Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
 
@@ -39,143 +41,122 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             return opcaoEscolhida;
         }
 
-        public void CadastrarEmprestimo()
+        public void CadastrarReserva()
         {
             ExibirCabecalho();
 
-            Console.WriteLine("Cadastrando Empréstimo...");
+            Console.WriteLine("Cadastrando Reserva...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo novoEmprestimo = ObterDadosEmprestimo();
+            Reserva novaReserva = ObterDadosReserva();
 
-            if (repositorioEmprestimo.VerificarEmprestimosAmigo(novoEmprestimo.Amigo))
-            {
-                Notificador.ExibirMensagem("Este membro já possui um empréstimo em aberto!", ConsoleColor.Red);
-                return;
-            }
+            string erros = novaReserva.Validar();
 
-            if (novoEmprestimo.Revista.StatusEmprestimo == "Emprestada")
+
+            if (novaReserva.Revista.StatusEmprestimo == "Emprestada")
             {
                 Notificador.ExibirMensagem("Esta revista já está emprestada a outro membro!", ConsoleColor.Red);
                 return;
             }
 
-            string erros = novoEmprestimo.Validar();
-
             if (erros.Length > 0)
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-                CadastrarEmprestimo();
+                CadastrarReserva();
                 return;
             }
 
-            novoEmprestimo.Revista.Emprestar();
-            repositorioEmprestimo.CadastrarEmprestimo(novoEmprestimo);
+            repositorioReserva.CadastrarReserva(novaReserva);
 
             Console.WriteLine();
-            Notificador.ExibirMensagem("O empréstimo foi cadastrado com sucesso!", ConsoleColor.Green);
+            Notificador.ExibirMensagem("A reserva foi cadastrada com sucesso!", ConsoleColor.Green);
         }
 
-        public void EditarEmprestimo()
+        public void CancelarReserva()
         {
             ExibirCabecalho();
 
-            Console.WriteLine("Editando Empréstimo...");
+            Console.WriteLine("Cancelando Caixa...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+            Reserva[] reservas = repositorioReserva.SelecionarReservas();
 
-            if (!emprestimos.Any(a => a != null))
+            if (!reservas.Any(a => a != null))
             {
-                Notificador.ExibirMensagem("Não há empréstimos cadastrados para edição.", ConsoleColor.Yellow);
+                Notificador.ExibirMensagem("Não há reservas cadastradas para cancelar.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarEmprestimos(false);
+            VisualizarReservas(false);
 
-            Console.Write("Digite o ID da caixa que deseja selecionar: ");
+            Console.Write("Digite o ID da reserva que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Emprestimo emprestimoEditado = ObterDadosEmprestimo();
+            Reserva reservaSelecionada = repositorioReserva.SelecionarReservaPorId(idSelecionado);
 
-            string erros = emprestimoEditado.Validar();
-
-            if (erros.Length > 0)
-            {
-                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-
-                CadastrarEmprestimo();
-                return;
-            }
-
-            bool conseguiuEditar = repositorioEmprestimo.EditarEmprestimo(idSelecionado, emprestimoEditado);
+            bool conseguiuExcluir = repositorioReserva.CancelarReserva(idSelecionado);
 
             Console.WriteLine();
-            Notificador.ExibirMensagem("O emprestimo foi editado com sucesso!", ConsoleColor.Green);
+            Notificador.ExibirMensagem("A reserva foi cancelada com sucesso!", ConsoleColor.Green);
         }
 
-        public void ExcluirEmprestimo()
+        public void EmprestarRevistaReservada()
         {
             ExibirCabecalho();
 
-            Console.WriteLine("Excluindo Emprestimos...");
+            Console.WriteLine("Emprestando Revista Reservada...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+            Reserva[] reservas = repositorioReserva.SelecionarReservas();
 
-            if (!emprestimos.Any(a => a != null))
+            if (!reservas.Any(a => a != null))
             {
-                Notificador.ExibirMensagem("Não há empréstimos cadastrados para exclusão.", ConsoleColor.Yellow);
+                Notificador.ExibirMensagem("Não há reservas cadastradas para cancelar.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarEmprestimos(false);
+            VisualizarReservas(false);
 
-            Console.Write("Digite o ID do emprestimo que deseja selecionar: ");
+            Console.Write("Digite o ID da reserva que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
+            Reserva reservaSelecionada = repositorioReserva.SelecionarReservaPorId(idSelecionado);
 
-            if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
-            {
-                Notificador.ExibirMensagem("O empréstimo não pode ser exclúido pois ainda está aberto.", ConsoleColor.Red);
-                return;
-            }
+            reservaSelecionada.Concluir();
+            repositorioEmprestimo.CadastrarEmprestimo(new Emprestimo(reservaSelecionada.Amigo, reservaSelecionada.Revista));
 
-            bool conseguiuExcluir = repositorioEmprestimo.ExcluirEmprestimo(idSelecionado);
-
-            Console.WriteLine();
-            Notificador.ExibirMensagem("O emprestimo foi excluído com sucesso!", ConsoleColor.Green);
+            Notificador.ExibirMensagem("\nRevista reservada emprestada com sucesso!", ConsoleColor.Green);
         }
 
-        public void VisualizarEmprestimos(bool exibirTitulo)
+
+        public void VisualizarReservas(bool exibirTitulo)
         {
             if (exibirTitulo)
             {
                 ExibirCabecalho();
 
-                Console.WriteLine("Visualizando Empréstimos...");
+                Console.WriteLine("Visualizando Reservas...");
                 Console.WriteLine("--------------------------------------------");
             }
 
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
-                "Id", "Amigo", "Revista", "Data de Empréstimo", "Data de Devolução", "Situação"
+                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
+                "Id", "Amigo", "Revista", "Dias De Reserva", "Status de Reserva"
             );
 
-            Emprestimo[] emprestimosCadastrados = repositorioEmprestimo.SelecionarEmprestimos();
+            Reserva[] reservasCadastradas = repositorioReserva.SelecionarReservas();
 
-            for (int i = 0; i < emprestimosCadastrados.Length; i++)
+            for (int i = 0; i < reservasCadastradas.Length; i++)
             {
-                Emprestimo e = emprestimosCadastrados[i];
+                Reserva r = reservasCadastradas[i];
 
-                if (e == null) continue;
+                if (r == null) continue;
 
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
-                     e.Id, e.Amigo.Nome, e.Revista.Titulo, e.DataEmprestimo.ToShortDateString(), e.ObterDataDevolucao().ToShortDateString(), e.Situacao
+                    "{0, -10} | {1, -15} | {2, -21} |  {3, -15} | {4, -20}",
+                    r.Id, r.Amigo.Nome, r.Revista.Titulo, r.DataReserva.ToShortDateString(), r.Status
                 );
             }
 
@@ -184,39 +165,11 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
-
-        public void RegistrarDevolucao()
-        {
-            ExibirCabecalho();
-
-            Console.WriteLine("Devolução Empréstimo...");
-            Console.WriteLine("--------------------------------------------");
-
-            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
-
-            if (!emprestimos.Any(a => a != null))
-            {
-                Notificador.ExibirMensagem("Não há empréstimos cadastrados para haver devoluções.", ConsoleColor.Yellow);
-                return;
-            }
-
-            VisualizarEmprestimos(false);
-
-            Console.Write("Selecione o ID de um Empréstimo: ");
-            int idDevolucao = Convert.ToInt32(Console.ReadLine()!.Trim());
-
-            Emprestimo emprestimoEscolhido = repositorioEmprestimo.SelecionarEmprestimoPorId(idDevolucao);
-
-            emprestimoEscolhido.RegistrarDevolucao();
-
-            Notificador.ExibirMensagem("Devolução feita com sucesso!", ConsoleColor.Green);
-        }
-
         public void ExibirCabecalho()
         {
             Console.Clear();
             Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("Controle de Empréstimos");
+            Console.WriteLine("Gestão de Reservas");
             Console.WriteLine("--------------------------------------------");
         }
 
@@ -309,9 +262,8 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine();
         }
 
-        public Emprestimo ObterDadosEmprestimo()
+        public Reserva ObterDadosReserva()
         {
-
             VisualizarAmigos();
 
             Console.Write("Digite o ID do membro que realizou o empréstimo: ");
@@ -322,16 +274,17 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 
             while (!conseguiuSelecionar)
             {
-                CadastrarEmprestimo();
+                CadastrarReserva();
             }
 
             Console.Write("Digite o ID da revista que realizou o empréstimo: ");
             int idRevista = Convert.ToInt32(Console.ReadLine()!.Trim());
+
             Revista revistaSelecionada = repositorioRevista.SelecionarRevistaPorId(idRevista);
             Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idAmigo);
 
-            Emprestimo novaEmprestimo = new Emprestimo(amigoSelecionado, revistaSelecionada);
-            return novaEmprestimo;
+            Reserva novaReserva = new Reserva(amigoSelecionado, revistaSelecionada);
+            return novaReserva;
         }
     }
 }

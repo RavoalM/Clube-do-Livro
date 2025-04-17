@@ -11,4 +11,8 @@
     <None Remove="ModuloCaixas\RepositorioCaixa.cs~RFd11f08.TMP" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ModuloMultas\" />
+  </ItemGroup>
+
 </Project>

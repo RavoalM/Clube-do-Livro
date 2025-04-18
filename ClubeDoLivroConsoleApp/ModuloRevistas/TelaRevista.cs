@@ -138,7 +138,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
             if (repositorioRevista.VerificarRevistaReservada(revistaSelecionada))
             {
-                Notificador.ExibirMensagem("A revista ainda está em um empréstimos em aberto e não pode ser excluída.", ConsoleColor.Red);
+                Notificador.ExibirMensagem("A revista ainda está reservada e não pode ser excluída.", ConsoleColor.Red);
                 return;
             }
 

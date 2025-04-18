@@ -18,7 +18,7 @@ namespace ClubeDoLivroConsoleApp
             RepositorioReserva repositorioReserva = new RepositorioReserva();
 
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa, repositorioAmigo);
-            TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
+            TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo, repositorioRevista);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa, repositorioRevista);
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
             TelaReserva telaReserva = new TelaReserva(repositorioReserva ,repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);

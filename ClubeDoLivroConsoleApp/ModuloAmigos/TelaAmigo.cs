@@ -1,5 +1,6 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
+using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
@@ -7,11 +8,13 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
     {
         public RepositorioAmigo repositorioAmigo;
         public RepositorioEmprestimo repositorioEmprestimo;
+        public RepositorioRevista repositorioRevista;
 
-        public TelaAmigo(RepositorioAmigo repositorioAmigo, RepositorioEmprestimo repositorioEmprestimo)
+        public TelaAmigo(RepositorioAmigo repositorioAmigo, RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista)
         {
             this.repositorioAmigo = repositorioAmigo;
             this.repositorioEmprestimo = repositorioEmprestimo;
+            this.repositorioRevista = repositorioRevista;
         }
 
         public char ApresentarMenu()
@@ -130,10 +133,17 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
             Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
+            Revista revistaSelecionada = repositorioRevista.SelecionarRevistaPorId(idSelecionado);
 
             if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
             {
                 Notificador.ExibirMensagem($"\nO membro ainda possui empréstimos em aberto e não pode ser excluído.", ConsoleColor.Red);
+                return;
+            }
+
+            if (repositorioRevista.VerificarRevistaReservada(revistaSelecionada))
+            {
+                Notificador.ExibirMensagem("O membro ainda ainda possui uma reserva e não pode ser excluído.", ConsoleColor.Red);
                 return;
             }
 

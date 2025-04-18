@@ -36,6 +36,11 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
             return erros;
         }
 
+        public DateTime ObterDataValidade()
+        {
+            return DataReserva.AddDays(2);
+        }
+
         public void Concluir()
         {
             Status = "Concluída";

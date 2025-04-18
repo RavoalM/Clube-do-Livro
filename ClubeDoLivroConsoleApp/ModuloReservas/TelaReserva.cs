@@ -60,7 +60,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
             }
 
             if (erros.Length > 0)
-            {
+            { 
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
                 CadastrarReserva();
                 return;
@@ -94,7 +94,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
 
             Reserva reservaSelecionada = repositorioReserva.SelecionarReservaPorId(idSelecionado);
 
-            bool conseguiuExcluir = repositorioReserva.CancelarReserva(idSelecionado);
+            bool conseguiuExcluir = repositorioReserva.CancelarReserva(reservaSelecionada);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("A reserva foi cancelada com sucesso!", ConsoleColor.Green);
@@ -142,8 +142,8 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -20}",
-                "Id", "Amigo", "Revista", "Dias De Reserva", "Status de Reserva"
+                "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
+                "Id", "Amigo", "Revista", "Dias De Reserva", "Validade da reserva","Status de Reserva"
             );
 
             Reserva[] reservasCadastradas = repositorioReserva.SelecionarReservas();
@@ -155,8 +155,8 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
                 if (r == null) continue;
 
                 Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} |  {3, -15} | {4, -20}",
-                    r.Id, r.Amigo.Nome, r.Revista.Titulo, r.DataReserva.ToShortDateString(), r.Status
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
+                    r.Id, r.Amigo.Nome, r.Revista.Titulo, r.DataReserva.ToShortDateString(), r.ObterDataValidade().ToShortDateString(), r.Status
                 );
             }
 

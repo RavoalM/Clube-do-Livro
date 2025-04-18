@@ -9,21 +9,21 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
 
         public void CadastrarReserva(Reserva novaReserva)
         {
-            novaReserva.Id = GeradorIds.GerarIdCaixa();
+            novaReserva.Id = GeradorIds.GerarIdReserva();
             novaReserva.Revista.Reservar();
             reservas[contadorReservas++] = novaReserva;
         }
 
-        public bool CancelarReserva(int idReserva)
+        public bool CancelarReserva(Reserva reservaEscolhida)
         {
             for (int i = 0; i < reservas.Length; i++)
             {
                 if (reservas[i] == null) continue;
 
-                else if (reservas[i].Id == idReserva)
+                else if (reservas[i].Id == reservaEscolhida.Id)
                 {
                     reservas[i] = null;
-
+                    reservaEscolhida.Cancelar();
                     return true;
                 }
             }
@@ -37,8 +37,6 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
             else
                 return false;
         }
-
-
 
         public Reserva SelecionarReservaPorId(int idCaixa)
         {

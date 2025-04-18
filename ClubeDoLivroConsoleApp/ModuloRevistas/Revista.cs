@@ -75,7 +75,6 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                 erros += "O campo 'Ano de Publicação' não pode ser anterior a 1000.\n";
             }
                 
-
             if (anoPublicacao > DateTime.Now)
             {
                 erros += "O campo 'Ano de Publicação' não pode ser um ano futurístico.\n";

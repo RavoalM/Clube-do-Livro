@@ -6,10 +6,10 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 {
     public class Emprestimo : EntidadeBase
     {
-        public Amigo Amigo;
-        public Revista Revista;
-        public DateTime DataEmprestimo;
-        public string Situacao;
+        public Amigo Amigo { get; set; }
+        public Revista Revista { get; set; }
+        public DateTime DataEmprestimo { get; set; }
+        public string Situacao { get; set; }
 
         public Emprestimo(Amigo amigo, Revista revista)
         {

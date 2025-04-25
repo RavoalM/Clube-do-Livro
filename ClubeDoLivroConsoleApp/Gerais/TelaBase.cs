@@ -1,5 +1,4 @@
 ﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
-using ClubeDoLivroConsoleApp.ModuloRevistas;
 using ClubeDoLivroConsoleApp.Utils;
 
 namespace ClubeDoLivroConsoleApp.Gerais

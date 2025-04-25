@@ -3,6 +3,7 @@ using ClubeDoLivroConsoleApp.Utils;
 using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
+using ClubeDoLivroConsoleApp.ModuloReservas;
 
 namespace ClubeDoLivroConsoleApp
 {
@@ -52,6 +53,23 @@ namespace ClubeDoLivroConsoleApp
                     if (opcaoEscolhida == '5')
                     {
                         telaEmprestimo.RegistrarDevolucao();
+                        continue;
+                    }
+                }
+
+                if (telaSelecionada is TelaReserva)
+                {
+                    TelaReserva telaReserva = (TelaReserva)telaSelecionada;
+
+                    if (opcaoEscolhida == '2')
+                    {
+                        telaReserva.ExcluirRegistro();
+                        continue;
+                    }
+
+                    if (opcaoEscolhida == '3')
+                    {
+                        telaReserva.EmprestarRevistaReservada();
                         continue;
                     }
                 }

@@ -215,9 +215,10 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             int idAmigo = Convert.ToInt32(Console.ReadLine()!.Trim());
 
             Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idAmigo);
+            Emprestimo[] emprestimosDoAmigo = amigoSelecionado.ObterEmprestimos();
 
             Console.WriteLine();
-            Console.WriteLine("Visualizando Empréstimos...");
+            Console.WriteLine("Visualizando Emprestimo de \"" + amigoSelecionado.Nome + "\"");
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine();
             Console.WriteLine(
@@ -225,15 +226,12 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
                 "Id", "Amigo", "Revista", "Data de Empréstimo", "Data de Devolução", "Situação"
             );
 
-            Emprestimo[] emprestimosDoAmigo = amigoSelecionado.ObterEmprestimos();
-
-            for (int i = 0; i < emprestimosDoAmigo.Length; i++)
+            foreach (Emprestimo emprestimo in emprestimosDoAmigo)
             {
-                Emprestimo e = emprestimosDoAmigo[i];
-                if (e == null) continue;
+                if (emprestimo == null) continue;
                 Console.WriteLine(
                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -20} | {5, -20}",
-                    e.Id, e.Amigo.Nome, e.Revista.Titulo, e.DataEmprestimo.ToShortDateString(), e.ObterDataDevolucao().ToShortDateString(), e.Situacao
+                    emprestimo.Id, emprestimo.Amigo.Nome, emprestimo.Revista.Titulo, emprestimo.DataEmprestimo.ToShortDateString(), emprestimo.ObterDataDevolucao().ToShortDateString(), emprestimo.Situacao
                );
             }
 

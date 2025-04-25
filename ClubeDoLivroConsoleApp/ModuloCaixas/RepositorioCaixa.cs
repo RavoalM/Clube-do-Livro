@@ -1,20 +1,21 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
     public class RepositorioCaixa : RepositorioBase
     {
-        public bool VerificarEtiquetas(Caixa caixaVerificar)
+        public bool VerificarEtiquetas(string etiqueta, int idIgnorar = -1)
         {
             for (int i = 0; i < registros.Length; i++)
             {
                 if (registros[i] == null)
                     continue;
-                
+
                 Caixa caixa = (Caixa)registros[i];
 
-                if (caixaVerificar.Etiqueta == caixa.Etiqueta)
+                if (caixa.Etiqueta == etiqueta && registros[i].Id != idIgnorar)
                     return true;
             }
 

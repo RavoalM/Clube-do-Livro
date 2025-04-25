@@ -67,6 +67,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
                 return;
             }
 
+            novaReserva.Revista.Reservar();
             repositorioReserva.CadastrarRegistro(novaReserva);
 
             Console.WriteLine();
@@ -77,11 +78,16 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
         {
             ExibirCabecalho();
 
-            Console.WriteLine("Cancelando Caixa...");
+            Console.WriteLine("Cancelando Reserva...");
             Console.WriteLine("--------------------------------------------");
 
-            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            EntidadeBase[] registros = repositorioReserva.SelecionarRegistros();
             Reserva[] reservasCadastradas = new Reserva[registros.Length];
+
+            for (int i = 0; i < registros.Length; i++)
+            {
+                reservasCadastradas[i] = (Reserva)registros[i];
+            }
 
             if (!reservasCadastradas.Any(a => a != null))
             {
@@ -109,12 +115,17 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
             Console.WriteLine("Emprestando Revista Reservada...");
             Console.WriteLine("--------------------------------------------");
 
-            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            EntidadeBase[] registros = repositorioReserva.SelecionarRegistros();
             Reserva[] reservasCadastradas = new Reserva[registros.Length];
+
+            for (int i = 0; i < registros.Length; i++)
+            {
+                reservasCadastradas[i] = (Reserva)registros[i];
+            }
 
             if (!reservasCadastradas.Any(a => a != null))
             {
-                Notificador.ExibirMensagem("Não há reservas cadastradas para cancelar.", ConsoleColor.Yellow);
+                Notificador.ExibirMensagem("Não há reservas para emprestar.", ConsoleColor.Yellow);
                 return;
             }
 
@@ -148,7 +159,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
                 "Id", "Amigo", "Revista", "Dias De Reserva", "Validade da reserva","Status de Reserva"
             );
 
-            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            EntidadeBase[] registros = repositorioReserva.SelecionarRegistros();
             Reserva[] reservasCadastradas = new Reserva[registros.Length];
 
             for (int i = 0; i < registros.Length; i++)
@@ -182,7 +193,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
                 "Id", "Nome", "Responsavel", "Telefone"
             );
-            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            EntidadeBase[] registros = repositorioAmigo.SelecionarRegistros();
             Amigo[] amigosCadastrados = new Amigo[registros.Length];
             for (int i = 0; i < registros.Length; i++)
             {
@@ -204,7 +215,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
         {
             bool conseguiuSelecionar = true;
             Console.WriteLine();
-            VisualizarRegistros(false);
+            VisualizarCaixas();
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
@@ -252,7 +263,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
                 "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
             );
-            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
             Caixa[] caixasCadastradas = new Caixa[registros.Length];
             for (int i = 0; i < registros.Length; i++)
             {

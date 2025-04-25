@@ -6,11 +6,11 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 {
     public class Revista : EntidadeBase
     {
-        public string Titulo;
-        public string NumeroEdicao;
-        public int AnoPublicacao;
-        public string StatusEmprestimo;
-        public Caixa Caixa;
+        public string Titulo { get; set; }
+        public string NumeroEdicao { get; set; }
+        public int AnoPublicacao { get; set; }
+        public string StatusEmprestimo { get; set; }
+        public Caixa Caixa { get; set; }
 
         public Revista(string titulo, string numeroEdicao, int anoPublicao, Caixa caixa)
         {
@@ -82,7 +82,6 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
             return erros;
         }
-
         public void Emprestar()
         {
             StatusEmprestimo = "Emprestada";

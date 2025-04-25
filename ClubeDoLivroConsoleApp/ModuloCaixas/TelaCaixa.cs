@@ -1,5 +1,4 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
-using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 using ClubeDoLivroConsoleApp.Utils;
 
@@ -46,7 +45,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
             string erros = novaCaixa.Validar();
 
-            if (repositorioCaixa.VerificarEtiquetas(novaCaixa))
+            if (repositorioCaixa.VerificarEtiquetas(novaCaixa.Etiqueta))
             {
                 Notificador.ExibirMensagem("Esta etiqueta já pertence a outra caixa.", ConsoleColor.Red);
                 CadastrarRegistro();
@@ -76,6 +75,11 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
             Caixa[] caixasCadastradas = new Caixa[registros.Length];
 
+            for (int i = 0; i < registros.Length; i++)
+            {
+                caixasCadastradas[i] = (Caixa)registros[i];
+            }
+
             if (!caixasCadastradas.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há caixas cadastradas para edição.", ConsoleColor.Yellow);
@@ -91,10 +95,10 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
             string erros = caixaEditada.Validar();
 
-            if (repositorioCaixa.VerificarEtiquetas(caixaEditada))
+            if (repositorioCaixa.VerificarEtiquetas(caixaEditada.Etiqueta, idSelecionado))
             {
                 Notificador.ExibirMensagem("Esta etiqueta já pertence a outra caixa.", ConsoleColor.Red);
-                CadastrarRegistro();
+                EditarRegistro();
                 return;
             }
 
@@ -120,6 +124,11 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
             EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
             Caixa[] caixasCadastradas = new Caixa[registros.Length];
+
+            for (int i = 0; i < registros.Length; i++)
+            {
+                caixasCadastradas[i] = (Caixa)registros[i];
+            }
 
             if (!caixasCadastradas.Any(a => a != null))
             {
@@ -218,7 +227,6 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             Console.WriteLine();
 
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
-            Console.WriteLine("Fim do método!");
         }
 
         public override EntidadeBase ObterDados()

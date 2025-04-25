@@ -6,10 +6,10 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
 {
     public class Reserva : EntidadeBase
     {
-        public Amigo Amigo;
-        public Revista Revista;
-        public DateTime DataReserva;
-        public string Status;
+        public Amigo Amigo { get; set; }
+        public Revista Revista { get; set; }
+        public DateTime DataReserva { get; set; }
+        public string Status { get; set; }
 
         public Reserva(Amigo amigo, Revista revista)
         {

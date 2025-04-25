@@ -1,6 +1,7 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
+using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 using ClubeDoLivroConsoleApp.Utils;
 
 namespace ClubeDoLivroConsoleApp.ModuloRevistas
@@ -78,6 +79,11 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
             Revista[] revistasCadastradas = new Revista[registros.Length];
 
+            for (int i = 0; i < registros.Length; i++)
+            {
+                revistasCadastradas[i] = (Revista)registros[i];
+            }
+
             if (!revistasCadastradas.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há revistas cadastradas para edição.", ConsoleColor.Yellow);
@@ -120,6 +126,11 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
             Revista[] revistasCadastradas = new Revista[registros.Length];
 
+            for (int i = 0; i < registros.Length; i++)
+            {
+                revistasCadastradas[i] = (Revista)registros[i];
+            }
+
             if (!revistasCadastradas.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há revistas cadastradas para exclusão.", ConsoleColor.Yellow);
@@ -131,10 +142,9 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.Write("Digite o ID da revista que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idSelecionado);
             Revista revistaSelecionada = (Revista)repositorioRevista.SelecionarRegistroPorId(idSelecionado);
 
-            if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
+            if (revistaSelecionada.StatusEmprestimo != "Disponivel")
             {
                 Notificador.ExibirMensagem("A revista ainda está em um empréstimos em aberto e não pode ser excluída.", ConsoleColor.Red);
                 return;
@@ -146,6 +156,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                 return;
             }
 
+            revistaSelecionada.Caixa.RemoverRevista(revistaSelecionada);
             bool conseguiuExcluir = repositorioRevista.ExcluirRegistro(idSelecionado);
 
             Console.WriteLine();

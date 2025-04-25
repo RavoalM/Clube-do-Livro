@@ -1,7 +1,31 @@
-﻿namespace ClubeDoLivroConsoleApp.Gerais
+﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloAmigos;
+using ClubeDoLivroConsoleApp.ModuloCaixas;
+using ClubeDoLivroConsoleApp.ModuloEmprestimo;
+using ClubeDoLivroConsoleApp.ModuloReservas;
+using ClubeDoLivroConsoleApp.ModuloRevistas;
+
+namespace ClubeDoLivroConsoleApp.Utils
 {
     public class TelaPrincipal
     {
+        private char opcaoPrincipal;
+
+        private RepositorioAmigo repositorioAmigo;
+        private RepositorioCaixa repositorioCaixa;
+        private RepositorioRevista repositorioRevista;
+        private RepositorioEmprestimo repositorioEmprestimo;
+        private RepositorioReserva repositorioReserva;
+
+        public TelaPrincipal()
+        {
+            this.repositorioAmigo = new RepositorioAmigo();
+            this.repositorioCaixa = new RepositorioCaixa();
+            this.repositorioRevista = new RepositorioRevista();
+            this.repositorioEmprestimo = new RepositorioEmprestimo();
+            this.repositorioReserva = new RepositorioReserva();
+        }
+
         public static void Intruducao()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -28,7 +52,7 @@
             Console.ResetColor();
         }
 
-        public char ApresentarMenuPrincipal()
+        public void ApresentarMenuPrincipal()
         {
             Console.Clear();
 
@@ -47,9 +71,41 @@
             Console.WriteLine();
 
             Console.Write("Escolha uma das opções: ");
-            char opcaoEscolhida = Console.ReadLine()[0];
-
-            return opcaoEscolhida;
+            opcaoPrincipal = Console.ReadLine()[0];
         }
+
+        public TelaBase ObterTela()
+        {
+            if (opcaoPrincipal == '1')
+            {
+                return new TelaAmigo(repositorioAmigo, repositorioEmprestimo, repositorioRevista);
+            }
+
+            else if (opcaoPrincipal == '2')
+            {
+                return new TelaCaixa(repositorioCaixa, repositorioRevista);
+            }
+
+            else if (opcaoPrincipal == '3')
+            {
+                return new TelaRevista(repositorioRevista, repositorioCaixa, repositorioAmigo);
+            }
+
+            else if (opcaoPrincipal == '4')
+            {
+                return new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
+            }
+
+            else if (opcaoPrincipal == '5')
+            {
+                return new TelaReserva(repositorioReserva, repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
+            }
+            else
+            {
+                Notificador.ExibirMensagem("Opção inválida!", ConsoleColor.Red);
+                return null;
+            }
+        }
+
     }
 }

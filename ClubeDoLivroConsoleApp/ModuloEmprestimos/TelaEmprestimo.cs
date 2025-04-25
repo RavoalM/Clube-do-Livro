@@ -2,17 +2,18 @@
 using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
+using ClubeDoLivroConsoleApp.Utils;
 
 namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 {
-    public class TelaEmprestimo
+    public class TelaEmprestimo : TelaBase
     {
         public RepositorioAmigo repositorioAmigo;
         public RepositorioRevista repositorioRevista;
         public RepositorioEmprestimo repositorioEmprestimo;
         public RepositorioCaixa repositorioCaixa;
 
-        public TelaEmprestimo(RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo, RepositorioCaixa repositorioCaixa)
+        public TelaEmprestimo(RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo, RepositorioCaixa repositorioCaixa) : base("Empréstimo", repositorioEmprestimo)
         {
             this.repositorioEmprestimo = repositorioEmprestimo;
             this.repositorioAmigo = repositorioAmigo;
@@ -20,7 +21,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             this.repositorioCaixa = repositorioCaixa;
         }
 
-        public char ApresentarMenu()
+        public override char ApresentarMenu()
         {
             ExibirCabecalho();
 
@@ -39,14 +40,14 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             return opcaoEscolhida;
         }
 
-        public void CadastrarEmprestimo()
+        public override void CadastrarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Cadastrando Empréstimo...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo novoEmprestimo = ObterDadosEmprestimo();
+            Emprestimo novoEmprestimo = ObterDados();
 
             if (repositorioEmprestimo.VerificarEmprestimosAmigo(novoEmprestimo.Amigo))
             {
@@ -71,38 +72,39 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             if (erros.Length > 0)
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-                CadastrarEmprestimo();
+                CadastrarRegistro();
                 return;
             }
 
             novoEmprestimo.Revista.Emprestar();
-            repositorioEmprestimo.CadastrarEmprestimo(novoEmprestimo);
+            repositorioEmprestimo.CadastrarRegistro(novoEmprestimo);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("O empréstimo foi cadastrado com sucesso!", ConsoleColor.Green);
         }
 
-        public void EditarEmprestimo()
+        public override void EditarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Editando Empréstimo...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Emprestimo[] emprestimosCadastrados = new Emprestimo[registros.Length];
 
-            if (!emprestimos.Any(a => a != null))
+            if (!emprestimosCadastrados.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há empréstimos cadastrados para edição.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarEmprestimos(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Emprestimo emprestimoEditado = ObterDadosEmprestimo();
+            Emprestimo emprestimoEditado = ObterDados();
 
             string erros = emprestimoEditado.Validar();
 
@@ -110,37 +112,38 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
 
-                CadastrarEmprestimo();
+                CadastrarRegistro();
                 return;
             }
 
-            bool conseguiuEditar = repositorioEmprestimo.EditarEmprestimo(idSelecionado, emprestimoEditado);
+            bool conseguiuEditar = repositorioEmprestimo.EditarRegistro(idSelecionado, emprestimoEditado);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("O emprestimo foi editado com sucesso!", ConsoleColor.Green);
         }
 
-        public void ExcluirEmprestimo()
+        public override void ExcluirRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Excluindo Emprestimos...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Emprestimo[] emprestimosCadastrados = new Emprestimo[registros.Length];
 
-            if (!emprestimos.Any(a => a != null))
+            if (!emprestimosCadastrados.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há empréstimos cadastrados para exclusão.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarEmprestimos(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID do emprestimo que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
+            Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idSelecionado);
 
             if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
             {
@@ -148,13 +151,13 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 return;
             }
 
-            bool conseguiuExcluir = repositorioEmprestimo.ExcluirEmprestimo(idSelecionado);
+            bool conseguiuExcluir = repositorioEmprestimo.ExcluirRegistro(idSelecionado);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("O emprestimo foi excluído com sucesso!", ConsoleColor.Green);
         }
 
-        public void VisualizarEmprestimos(bool exibirTitulo)
+        public override void VisualizarRegistros(bool exibirTitulo)
         {
             if (exibirTitulo)
             {
@@ -171,7 +174,8 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 "Id", "Amigo", "Revista", "Data de Empréstimo", "Data de Devolução", "Situação"
             );
 
-            Emprestimo[] emprestimosCadastrados = repositorioEmprestimo.SelecionarEmprestimos();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Emprestimo[] emprestimosCadastrados = new Emprestimo[registros.Length];
 
             for (int i = 0; i < emprestimosCadastrados.Length; i++)
             {
@@ -190,7 +194,6 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
-
         public void RegistrarDevolucao()
         {
             ExibirCabecalho();
@@ -198,32 +201,25 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine("Devolução Empréstimo...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarEmprestimos();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Emprestimo[] emprestimosCadastrados = new Emprestimo[registros.Length];
 
-            if (!emprestimos.Any(a => a != null))
+            if (!emprestimosCadastrados.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há empréstimos cadastrados para haver devoluções.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarEmprestimos(false);
+            VisualizarRegistros(false);
 
             Console.Write("Selecione o ID de um Empréstimo: ");
             int idDevolucao = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Emprestimo emprestimoEscolhido = repositorioEmprestimo.SelecionarEmprestimoPorId(idDevolucao);
+            Emprestimo emprestimoEscolhido = (Emprestimo)repositorioEmprestimo.SelecionarRegistroPorId(idDevolucao);
 
             emprestimoEscolhido.RegistrarDevolucao();
 
             Notificador.ExibirMensagem("Devolução feita com sucesso!", ConsoleColor.Green);
-        }
-
-        public void ExibirCabecalho()
-        {
-            Console.Clear();
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("Controle de Empréstimos");
-            Console.WriteLine("--------------------------------------------");
         }
 
         public void VisualizarAmigos()
@@ -235,7 +231,8 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
                 "Id", "Nome", "Responsavel", "Telefone"
             );
-            Amigo[] amigosCadastrados = repositorioAmigo.SelecionarAmigos();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Amigo[] amigosCadastrados = new Amigo[registros.Length];
             for (int i = 0; i < amigosCadastrados.Length; i++)
             {
                 Amigo a = amigosCadastrados[i];
@@ -258,7 +255,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idCaixa);
+            Caixa caixaSelecionada = (Caixa)repositorioCaixa.SelecionarRegistroPorId(idCaixa);
 
             if (caixaSelecionada == null)
             {
@@ -301,7 +298,8 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
                 "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
             );
-            Caixa[] caixasCadastradas = repositorioCaixa.SelecionarCaixas();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Caixa[] caixasCadastradas = new Caixa[registros.Length];
             for (int i = 0; i < caixasCadastradas.Length; i++)
             {
                 Caixa c = caixasCadastradas[i];
@@ -315,7 +313,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine();
         }
 
-        public Emprestimo ObterDadosEmprestimo()
+        public override Emprestimo ObterDados()
         {
 
             VisualizarAmigos();
@@ -328,14 +326,14 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 
             while (!conseguiuSelecionar)
             {
-                CadastrarEmprestimo();
+                CadastrarRegistro();
             }
 
             Console.Write("Digite o ID da revista que realizou o empréstimo: ");
             int idRevista = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Revista revistaSelecionada = repositorioRevista.SelecionarRevistaPorId(idRevista);
-            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idAmigo);
+            Revista revistaSelecionada = (Revista)repositorioRevista.SelecionarRegistroPorId(idRevista);
+            Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idAmigo);
 
             Emprestimo novaEmprestimo = new Emprestimo(amigoSelecionado, revistaSelecionada);
             return novaEmprestimo;

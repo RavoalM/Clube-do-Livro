@@ -1,57 +1,10 @@
-﻿using ClubeDoLivroConsoleApp.Gerais;
-using ClubeDoLivroConsoleApp.ModuloAmigos;
+﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
+using ClubeDoLivroConsoleApp.Gerais;
 
 namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 {
-    public class RepositorioEmprestimo
+    public class RepositorioEmprestimo : RepositorioBase
     {
-        public Emprestimo[] emprestimos = new Emprestimo[100];
-        public int contadorEmprestimos = 0;
-
-        public void CadastrarEmprestimo(Emprestimo novoEmprestimo)
-        {
-            novoEmprestimo.Id = GeradorIds.GerarIdEmprestimo();
-            novoEmprestimo.Amigo.AdicionarEmpréstimo(novoEmprestimo);
-            novoEmprestimo.Revista.Emprestar();
-            emprestimos[contadorEmprestimos++] = novoEmprestimo;
-        }
-
-        public bool EditarEmprestimo(int idEmprestimo, Emprestimo emprestimoEditado)
-        {
-            for (int i = 0; i < emprestimos.Length; i++)
-            {
-                if (emprestimos[i] == null) continue;
-
-                else if (emprestimos[i].Id == idEmprestimo)
-                {
-                    emprestimos[i].Amigo = emprestimoEditado.Amigo;
-                    emprestimos[i].Revista = emprestimoEditado.Revista;
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public bool ExcluirEmprestimo(int idEmprestimo)
-        {
-            for (int i = 0; i < emprestimos.Length; i++)
-            {
-                if (emprestimos[i] == null) continue;
-
-                else if (emprestimos[i].Id == idEmprestimo)
-                {
-                    emprestimos[i] = null;
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-
         public bool VerificarEmprestimosAmigo(Amigo amigoEscolhido)
         {
             int emprestimos = 0;
@@ -89,27 +42,6 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 }
 
             }
-        }
-
-        public Emprestimo SelecionarEmprestimoPorId(int idEmprestimo)
-        {
-            for (int i = 0; i < emprestimos.Length; i++)
-            {
-                Emprestimo e = emprestimos[i];
-
-                if (e == null)
-                    continue;
-
-                else if (e.Id == idEmprestimo)
-                    return e;
-            }
-
-            return null;
-        }
-
-        public Emprestimo[] SelecionarEmprestimos()
-        {
-            return emprestimos;
         }
     }
 }

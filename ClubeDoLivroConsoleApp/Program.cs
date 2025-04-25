@@ -1,9 +1,8 @@
-﻿using ClubeDoLivroConsoleApp.Gerais;
-using ClubeDoLivroConsoleApp.ModuloAmigos;
+﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
+using ClubeDoLivroConsoleApp.Utils;
+using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
-using ClubeDoLivroConsoleApp.ModuloRevistas;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
-using ClubeDoLivroConsoleApp.ModuloReservas;
 
 namespace ClubeDoLivroConsoleApp
 {
@@ -11,122 +10,63 @@ namespace ClubeDoLivroConsoleApp
     {
         static void Main(string[] args)
         {
-            RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
-            RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
-            RepositorioRevista repositorioRevista = new RepositorioRevista();
-            RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
-            RepositorioReserva repositorioReserva = new RepositorioReserva();
-
-            TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa, repositorioAmigo);
-            TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo, repositorioRevista);
-            TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa, repositorioRevista);
-            TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
-            TelaReserva telaReserva = new TelaReserva(repositorioReserva ,repositorioEmprestimo, repositorioRevista, repositorioAmigo, repositorioCaixa);
-
             TelaPrincipal.Intruducao();
 
             TelaPrincipal telaPrincipal = new TelaPrincipal();
 
             while (true)
             {
-                char opcaoPrincipal = telaPrincipal.ApresentarMenuPrincipal();
+                telaPrincipal.ApresentarMenuPrincipal();
 
-                if (opcaoPrincipal == '1')
+                TelaBase telaSelecionada = telaPrincipal.ObterTela();
+
+                char opcaoEscolhida = telaSelecionada.ApresentarMenu();
+
+
+                if (telaSelecionada is TelaAmigo)
                 {
-                    char opcaoEscolhida = telaAmigo.ApresentarMenu();
+                    TelaAmigo telaAmigo = (TelaAmigo)telaSelecionada;
 
-                    switch (opcaoEscolhida)
+                    if (opcaoEscolhida == '5')
                     {
-                        case '1': telaAmigo.CadastrarAmigo(); break;
-
-                        case '2': telaAmigo.EditarAmigo(); break;
-
-                        case '3': telaAmigo.ExcluirAmigo(); break;
-
-                        case '4': telaAmigo.VisualizarAmigos(true); break;
-
-                        case '5': telaAmigo.VisualizarEmprestimosAmigo(); break;
-
-                        default: break;
+                        telaAmigo.VisualizarEmprestimosAmigo();
+                        break;
                     }
                 }
 
-                if (opcaoPrincipal == '2')
+                if (telaSelecionada is TelaCaixa)
                 {
-                    char opcaoEscolhida = telaCaixa.ApresentarMenu();
+                    TelaCaixa telaCaixa = (TelaCaixa)telaSelecionada;
 
-                    switch (opcaoEscolhida)
+                    if (opcaoEscolhida == '5')
                     {
-                        case '1': telaCaixa.CadastrarCaixa(); break;
-
-                        case '2': telaCaixa.EditarCaixa(); break;
-
-                        case '3': telaCaixa.ExcluirCaixa(); break;
-
-                        case '4': telaCaixa.VisualizarCaixas(true); break;
-
-                        case '5': telaCaixa.VisualizarRevistasNaCaixa(); break;
-
-                        default: break;
+                        telaCaixa.VisualizarRevistasNaCaixa();
+                        break;
                     }
                 }
 
-                if (opcaoPrincipal == '3')
+                if (telaSelecionada is TelaEmprestimo)
                 {
-                    char opcaoEscolhida = telaRevista.ApresentarMenu();
+                    TelaEmprestimo telaEmprestimo = (TelaEmprestimo)telaSelecionada;
 
-                    switch (opcaoEscolhida)
+                    if (opcaoEscolhida == '5')
                     {
-                        case '1':
-                            telaRevista.CadastraRevista();
-                            break;
-
-                        case '2': telaRevista.EditarRevista(); break;
-
-                        case '3': telaRevista.ExcluirRevista(); break;
-
-                        case '4': telaRevista.VisualizarRevistas(true); break;
-
-                        default: break;
+                        telaEmprestimo.RegistrarDevolucao();
+                        break;
                     }
                 }
 
-                if (opcaoPrincipal == '4')
+                switch (opcaoEscolhida)
                 {
-                    char opcaoEscolhida = telaEmprestimo.ApresentarMenu();
+                    case '1': telaSelecionada.CadastrarRegistro(); break;
 
-                    switch (opcaoEscolhida)
-                    {
-                        case '1': telaEmprestimo.CadastrarEmprestimo(); break;
+                    case '2': telaSelecionada.EditarRegistro(); break;
 
-                        case '2': telaEmprestimo.EditarEmprestimo(); break;
+                    case '3': telaSelecionada.ExcluirRegistro(); break;
 
-                        case '3': telaEmprestimo.ExcluirEmprestimo(); break;
+                    case '4': telaSelecionada.VisualizarRegistros(true); break;
 
-                        case '4': telaEmprestimo.VisualizarEmprestimos(true); break;
-
-                        case '5': telaEmprestimo.RegistrarDevolucao(); break;
-
-                        default: break;
-                    }
-                }
-
-                if (opcaoPrincipal == '5')
-                {
-                    char opcaoEscolhida = telaReserva.ApresentarMenu();
-
-                    switch (opcaoEscolhida)
-                    {
-                        case '1': telaReserva.CadastrarReserva(); break;
-
-                        case '2': telaReserva.CancelarReserva(); break;
-
-                        case '3': telaReserva.EmprestarRevistaReservada(); break;
-
-                        case '4': telaReserva.VisualizarReservas(true); break;
-
-                        default: break;
-                    }
+                    default: break;
                 }
             }
         }

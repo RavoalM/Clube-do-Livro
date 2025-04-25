@@ -1,11 +1,11 @@
-﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
+﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 {
-    public class Emprestimo
+    public class Emprestimo : EntidadeBase
     {
-        public int Id;
         public Amigo Amigo;
         public Revista Revista;
         public DateTime DataEmprestimo;
@@ -19,7 +19,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Situacao = "Aberta";
         }
 
-        public string Validar()
+        public override string Validar()
         {
             string erros = "";
 
@@ -44,6 +44,14 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
         {
             Situacao = "Concluído";
             Revista.Devolver();
+        }
+
+        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        {
+            Emprestimo emprestimoEditado = (Emprestimo)registroEditado;
+
+            Amigo = emprestimoEditado.Amigo;
+            Revista = emprestimoEditado.Revista;
         }
     }
 }

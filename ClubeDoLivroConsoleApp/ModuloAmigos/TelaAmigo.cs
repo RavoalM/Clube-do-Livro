@@ -1,56 +1,57 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
+using ClubeDoLivroConsoleApp.Utils;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
-    public class TelaAmigo
+    public class TelaAmigo : TelaBase
     {
         public RepositorioAmigo repositorioAmigo;
         public RepositorioEmprestimo repositorioEmprestimo;
         public RepositorioRevista repositorioRevista;
 
-        public TelaAmigo(RepositorioAmigo repositorioAmigo, RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista)
+        public TelaAmigo(RepositorioAmigo repositorioAmigo, RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista) : base("Amigo", repositorioAmigo)
         {
             this.repositorioAmigo = repositorioAmigo;
             this.repositorioEmprestimo = repositorioEmprestimo;
             this.repositorioRevista = repositorioRevista;
         }
 
-        public char ApresentarMenu()
+        public override char ApresentarMenu()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Escolha a operação desejada:");
-            Console.WriteLine("1 - Cadastro de Amigo");
-            Console.WriteLine("2 - Edição de Amigo");
-            Console.WriteLine("3 - Exclusão de Amigo");
-            Console.WriteLine("4 - Visualização de Amigo");
-            Console.WriteLine("5 - Visualização de Empréstimos de Amigo");
+            Console.WriteLine($"1 - Cadastro de {nomeEntidade}");
+            Console.WriteLine($"2 - Edição de {nomeEntidade}");
+            Console.WriteLine($"3 - Exclusão de {nomeEntidade}");
+            Console.WriteLine($"4 - Visualização de {nomeEntidade}s");
+            Console.WriteLine($"5 - Visualização de Empréstimos de {nomeEntidade}");
             Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
- 
+
             Console.Write("Digite um opção válida: ");
             char opcaoEscolhida = Console.ReadLine()[0];
 
             return opcaoEscolhida;
         }
 
-        public void CadastrarAmigo()
+        public override void CadastrarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Cadastrando Amigo...");
             Console.WriteLine("--------------------------------------------");
 
-            Amigo novoAmigo = ObterDadosAmigo();
+            Amigo novoAmigo = (Amigo)ObterDados();
 
             string erros = novoAmigo.Validar();
 
             if (repositorioAmigo.TelefoneRepetido(novoAmigo.Telefone))
             {
                 Notificador.ExibirMensagem("Este telefone já pertence a outro amigo.", ConsoleColor.Red);
-                CadastrarAmigo();
+                CadastrarRegistro();
                 return;
             }
 
@@ -58,82 +59,94 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
 
-                CadastrarAmigo();
+                CadastrarRegistro();
                 return;
             }
 
-            repositorioAmigo.CadastrarAmigo(novoAmigo);
+            repositorioAmigo.CadastrarRegistro(novoAmigo);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("O membro foi cadastrado com sucesso!", ConsoleColor.Green);
         }
 
-        public void EditarAmigo()
+        public override void EditarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Editando Membro...");
             Console.WriteLine("--------------------------------------------");
 
-            Amigo[] amigos = repositorioAmigo.SelecionarAmigos();
+            EntidadeBase[] registros = repositorioAmigo.SelecionarRegistros();
+            Amigo[] amigosCadastrados = new Amigo[registros.Length];
 
-            if (!amigos.Any(a => a != null))
+            for (int i = 0; i < registros.Length; i++)
+            {
+                amigosCadastrados[i] = (Amigo)registros[i];
+            }
+
+            if (!registros.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há membros cadastrados para edição.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarAmigos(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID do membro que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoEditado = ObterDadosAmigo();
+            Amigo amigoEditado = (Amigo)ObterDados();
 
             string erros = amigoEditado.Validar();
 
             if (repositorioAmigo.TelefoneRepetido(amigoEditado.Telefone, idSelecionado))
             {
                 Notificador.ExibirMensagem("Este telefone já pertence a outro amigo.", ConsoleColor.Red);
-                EditarAmigo();
+                EditarRegistro();
                 return;
             }
 
             if (erros.Length > 0)
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-                EditarAmigo();
+                EditarRegistro();
                 return;
             }
 
-            bool conseguiuEditar = repositorioAmigo.EditarAmigo(idSelecionado, amigoEditado);
+            bool conseguiuEditar = repositorioAmigo.EditarRegistro(idSelecionado, amigoEditado);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("O membro foi editado com sucesso!", ConsoleColor.Green);
         }
 
-        public void ExcluirAmigo()
+        public override void ExcluirRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Excluindo Membro...");
             Console.WriteLine("--------------------------------------------");
 
-            Amigo[] amigos = repositorioAmigo.SelecionarAmigos();
+            EntidadeBase[] registros = repositorioAmigo.SelecionarRegistros();
+            Amigo[] amigosCadastrados = new Amigo[registros.Length];
 
-            if (!amigos.Any(a => a != null))
+            for (int i = 0; i < registros.Length; i++)
+            {
+                amigosCadastrados[i] = (Amigo)registros[i];
+            }
+
+            if (!registros.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há membros cadastrados para exclusão.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarAmigos(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID do membro que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
-            Revista revistaSelecionada = repositorioRevista.SelecionarRevistaPorId(idSelecionado);
+            Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idSelecionado);
+            Revista revistaSelecionada = (Revista)repositorioRevista.SelecionarRegistroPorId(idSelecionado);
 
             if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
             {
@@ -147,13 +160,13 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
                 return;
             }
 
-            bool conseguiuExcluir = repositorioAmigo.ExcluirAmigo(idSelecionado);
+            bool conseguiuExcluir = repositorioAmigo.ExcluirRegistro(idSelecionado);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("O membro foi excluído com sucesso!", ConsoleColor.Green);
         }
 
-        public void VisualizarAmigos(bool exibirTitulo)
+        public override void VisualizarRegistros(bool exibirTitulo)
         {
             if (exibirTitulo)
             {
@@ -170,7 +183,13 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
                 "Id", "Nome", "Responsavel", "Telefone"
             );
 
-            Amigo[] amigosCadastrados = repositorioAmigo.SelecionarAmigos();
+            EntidadeBase[] registros = repositorioAmigo.SelecionarRegistros();
+            Amigo[] amigosCadastrados = new Amigo[registros.Length];
+
+            for (int i = 0; i < registros.Length; i++)
+            {
+                amigosCadastrados[i] = (Amigo)registros[i];     
+            }
 
             for (int i = 0; i < amigosCadastrados.Length; i++)
             {
@@ -191,12 +210,12 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
 
         public void VisualizarEmprestimosAmigo()
         {
-            VisualizarAmigos(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID do membro que realizou o empréstimo: ");
             int idAmigo = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idAmigo);
+            Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idAmigo);
 
             Console.WriteLine();
             Console.WriteLine("Visualizando Empréstimos...");
@@ -224,15 +243,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
-        public void ExibirCabecalho()
-        {
-            Console.Clear();
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("Gestão de Amigos");
-            Console.WriteLine("--------------------------------------------");
-        }
-
-        public Amigo ObterDadosAmigo()
+        public override EntidadeBase ObterDados()
         {
             Console.Write("Digite o nome do membro: ");
             string nome = Console.ReadLine()!.Trim();

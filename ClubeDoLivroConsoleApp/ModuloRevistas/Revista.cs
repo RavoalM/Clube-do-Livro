@@ -1,11 +1,11 @@
-﻿using ClubeDoLivroConsoleApp.ModuloCaixas;
+﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloCaixas;
 using System.Globalization;
 
 namespace ClubeDoLivroConsoleApp.ModuloRevistas
 {
-    public class Revista
+    public class Revista : EntidadeBase
     {
-        public int Id;
         public string Titulo;
         public string NumeroEdicao;
         public int AnoPublicacao;
@@ -21,7 +21,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Caixa = caixa;
         }
 
-        public string Validar()
+        public override string Validar()
         {
             string erros = "";
 
@@ -74,7 +74,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             {
                 erros += "O campo 'Ano de Publicação' não pode ser anterior a 1000.\n";
             }
-                
+
             if (anoPublicacao > DateTime.Now)
             {
                 erros += "O campo 'Ano de Publicação' não pode ser um ano futurístico.\n";
@@ -94,6 +94,17 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
         public void Reservar()
         {
             StatusEmprestimo = "Reservada";
+        }
+
+        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        {
+            Revista revistaEditado = (Revista)registroEditado;
+
+            Titulo = revistaEditado.Titulo;
+            NumeroEdicao = revistaEditado.NumeroEdicao;
+            AnoPublicacao = revistaEditado.AnoPublicacao;
+            AnoPublicacao = revistaEditado.AnoPublicacao;
+            Caixa = revistaEditado.Caixa;
         }
     }
 }

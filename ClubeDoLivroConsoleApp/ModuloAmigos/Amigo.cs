@@ -1,14 +1,15 @@
-﻿using ClubeDoLivroConsoleApp.ModuloEmprestimo;
+﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
-    public class Amigo
+    public class Amigo : EntidadeBase
     {
-        public int Id;
-        public string Nome;
-        public string Responsavel;
-        public string Telefone;
-        public Emprestimo[] Emprestimos = new Emprestimo[100];
+        public string Nome { get; set; }
+        public string Responsavel { get; set; }
+        public string Telefone { get; set; }
+
+        public Emprestimo[] Emprestimos = new Emprestimo[100]; 
 
         public Amigo(string nome, string responsavel, string telefone)
         {
@@ -17,7 +18,7 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             Telefone = telefone;
         }
 
-        public string Validar()
+        public override string Validar()
         {
             string erros = "";
 
@@ -106,5 +107,13 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             return Emprestimos;
         }
 
+        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        {
+            Amigo amigoEditado = (Amigo)registroEditado;
+
+            Nome = amigoEditado.Nome;
+            Responsavel = amigoEditado.Responsavel;
+            Telefone = amigoEditado.Telefone;
+        }
     }
 }

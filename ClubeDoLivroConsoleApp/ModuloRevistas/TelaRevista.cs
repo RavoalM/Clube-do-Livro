@@ -1,23 +1,24 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
+using ClubeDoLivroConsoleApp.Utils;
 
 namespace ClubeDoLivroConsoleApp.ModuloRevistas
 {
-    public class TelaRevista
+    public class TelaRevista : TelaBase
     {
         public RepositorioCaixa repositorioCaixa;
         public RepositorioRevista repositorioRevista;
         public RepositorioAmigo repositorioAmigo;
 
-        public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa, RepositorioAmigo repositorioAmigo)
+        public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa, RepositorioAmigo repositorioAmigo) : base("Revista", repositorioRevista)
         {
             this.repositorioCaixa = repositorioCaixa;
             this.repositorioRevista = repositorioRevista;
             this.repositorioAmigo = repositorioAmigo;
         }
 
-        public char ApresentarMenu()
+        public override char ApresentarMenu()
         {
             ExibirCabecalho();
 
@@ -35,67 +36,68 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             return opcaoEscolhida;
         }
 
-        public void CadastraRevista()
+        public override void CadastrarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Cadastrando Revistas...");
             Console.WriteLine("--------------------------------------------");
 
-            Revista novaRevista = ObterDadosRevista();
+            Revista novaRevista = ObterDados();
 
             string erros = novaRevista.Validar();
 
             if (repositorioRevista.VerificarIndenfidicacaoRevista(novaRevista))
             {
                 Notificador.ExibirMensagem("Esta titulo já pertence a outra revista.", ConsoleColor.Red);
-                CadastraRevista();
+                CadastrarRegistro();
                 return;
             }
 
             if (erros.Length > 0)
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-                CadastraRevista();
+                CadastrarRegistro();
                 return;
             }
 
-            repositorioRevista.CadastrarRevista(novaRevista);
+            repositorioRevista.CadastrarRegistro(novaRevista);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("A revista foi cadastrado com sucesso!", ConsoleColor.Green);
         }
 
-        public void EditarRevista()
+        public override void EditarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Editando Revista...");
             Console.WriteLine("--------------------------------------------");
 
-            Revista[] revistas = repositorioRevista.SelecionarRevistas();
+            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            Revista[] revistasCadastradas = new Revista[registros.Length];
 
-            if (!revistas.Any(a => a != null))
+            if (!revistasCadastradas.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há revistas cadastradas para edição.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarRevistas(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID da revista que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Revista revistaOriginal = repositorioRevista.SelecionarRevistaPorId(idSelecionado);
+            Revista revistaOriginal = (Revista)repositorioRevista.SelecionarRegistroPorId(idSelecionado);
             Caixa caixaAntiga = revistaOriginal.Caixa;
 
             Console.WriteLine();
 
-            Revista revistaEditada = ObterDadosRevista();
+            Revista revistaEditada = ObterDados();
 
             Caixa caixaEditada = revistaEditada.Caixa;
 
-            bool conseguiuEditar = repositorioRevista.EditarRevista(idSelecionado, revistaEditada);
+            bool conseguiuEditar = repositorioRevista.EditarRegistro(idSelecionado, revistaEditada);
 
             if (caixaAntiga != caixaEditada)
             {
@@ -107,28 +109,29 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Notificador.ExibirMensagem("A revista foi editada com sucesso!", ConsoleColor.Green);
         }
 
-        public void ExcluirRevista()
+        public override void ExcluirRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Excluindo revista...");
             Console.WriteLine("--------------------------------------------");
 
-            Revista[] revistas = repositorioRevista.SelecionarRevistas();
+            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            Revista[] revistasCadastradas = new Revista[registros.Length];
 
-            if (!revistas.Any(a => a != null))
+            if (!revistasCadastradas.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há revistas cadastradas para exclusão.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarRevistas(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID da revista que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoSelecionado = repositorioAmigo.SelecionarAmigoPorId(idSelecionado);
-            Revista revistaSelecionada = repositorioRevista.SelecionarRevistaPorId(idSelecionado);
+            Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idSelecionado);
+            Revista revistaSelecionada = (Revista)repositorioRevista.SelecionarRegistroPorId(idSelecionado);
 
             if (repositorioAmigo.VerificarEmprestimosAmigo(amigoSelecionado))
             {
@@ -142,13 +145,13 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                 return;
             }
 
-            bool conseguiuExcluir = repositorioRevista.ExcluirRevista(idSelecionado);
+            bool conseguiuExcluir = repositorioRevista.ExcluirRegistro(idSelecionado);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("A revista foi excluída com sucesso!", ConsoleColor.Green);
         }
 
-        public void VisualizarRevistas(bool exibirTitulo)
+        public override void VisualizarRegistros(bool exibirTitulo)
         {
             if (exibirTitulo)
             {
@@ -165,7 +168,8 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                 "Id", "Titulo", "Numero da Edicao", "Ano de Publicacao", "Status Emprestimo", "Caixa"
             );
 
-            Revista[] revistasCadastradas = repositorioRevista.SelecionarRevistas();
+            EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
+            Revista[] revistasCadastradas = new Revista[registros.Length];
 
             for (int i = 0; i < revistasCadastradas.Length; i++)
             {
@@ -184,14 +188,6 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
-        public void ExibirCabecalho()
-        {
-            Console.Clear();
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("Controle de Revistas");
-            Console.WriteLine("--------------------------------------------");
-        }
-
         public void VisualizarCaixas()
         {
             Console.WriteLine("Visualizando Caixas...");
@@ -201,7 +197,8 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
                 "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
             );
-            Caixa[] caixasCadastradas = repositorioCaixa.SelecionarCaixas();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Caixa[] caixasCadastradas = new Caixa[registros.Length];
             for (int i = 0; i < caixasCadastradas.Length; i++)
             {
                 Caixa c = caixasCadastradas[i];
@@ -214,7 +211,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.WriteLine();
         }
 
-        public Revista ObterDadosRevista()
+        public override Revista ObterDados()
         {
             Console.Write("Digite o titulo da Revista: ");
             string titulo = Console.ReadLine()!.Trim();
@@ -225,14 +222,15 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.Write("Digite o ano de publicação da revista: ");
             int AnoPublicacao = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Caixa[] caixas = repositorioCaixa.SelecionarCaixas();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Caixa[] caixasCadastradas = new Caixa[registros.Length];
 
             VisualizarCaixas();
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idCaixa);
+            Caixa caixaSelecionada = (Caixa)repositorioCaixa.SelecionarRegistroPorId(idCaixa);
 
             Revista novaRevista = new Revista(titulo, numeroEdicao, AnoPublicacao, caixaSelecionada);
 

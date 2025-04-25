@@ -1,12 +1,11 @@
-﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
+﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
-using System.Runtime.Serialization;
 
 namespace ClubeDoLivroConsoleApp.ModuloReservas
 {
-    public class Reserva
+    public class Reserva : EntidadeBase
     {
-        public int Id;
         public Amigo Amigo;
         public Revista Revista;
         public DateTime DataReserva;
@@ -20,7 +19,7 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
             Status = "Ativa";
         }
 
-        public string Validar()
+        public override string Validar()
         {
             string erros = "";
 
@@ -45,9 +44,18 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
         {
             Status = "Concluída";
         }
+
         public void Cancelar()
         {
             Revista.StatusEmprestimo = "Disponível";
+        }
+
+        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        {
+            Reserva reservaEditada = (Reserva)registroEditado;
+
+            Amigo = reservaEditada.Amigo;
+            Revista = reservaEditada.Revista;
         }
     }
 }

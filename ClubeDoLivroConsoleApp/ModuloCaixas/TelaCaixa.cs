@@ -1,29 +1,30 @@
 ﻿using ClubeDoLivroConsoleApp.Gerais;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
+using ClubeDoLivroConsoleApp.Utils;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
-    public class TelaCaixa
+    public class TelaCaixa : TelaBase
     {
         public RepositorioCaixa repositorioCaixa;
         public RepositorioRevista repositorioRevista;
 
-        public TelaCaixa(RepositorioCaixa repositorioCaixa, RepositorioRevista repositorioRevista)
+        public TelaCaixa(RepositorioCaixa repositorioCaixa, RepositorioRevista repositorioRevista) : base("Caixa", repositorioCaixa)
         {
             this.repositorioCaixa = repositorioCaixa;
             this.repositorioRevista = repositorioRevista;
         }
 
-        public char ApresentarMenu()
+        public override char ApresentarMenu()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Escolha a operação desejada:");
-            Console.WriteLine("1 - Cadastro de Caixa");
-            Console.WriteLine("2 - Edição de Caixa");
-            Console.WriteLine("3 - Exclusão de Caixa");
-            Console.WriteLine("4 - Visualização de Caixa");
-            Console.WriteLine("5 - Visualização de Revistas na Caixa");
+            Console.WriteLine($"1 - Cadastro de {nomeEntidade}");
+            Console.WriteLine($"2 - Edição de {nomeEntidade}");
+            Console.WriteLine($"3 - Exclusão de {nomeEntidade}");
+            Console.WriteLine($"4 - Visualização de {nomeEntidade}s");
+            Console.WriteLine($"5 - Visualização de Revistas na {nomeEntidade}");
             Console.WriteLine("S - Voltar");
             Console.WriteLine("--------------------------------------------");
 
@@ -33,102 +34,104 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             return opcaoEscolhida;
         }
 
-        public void CadastrarCaixa()
+        public override void CadastrarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Cadastrando Caixa...");
             Console.WriteLine("--------------------------------------------");
 
-            Caixa novaCaixa = ObterDadosCaixa();
+            Caixa novaCaixa = ObterDados();
 
             string erros = novaCaixa.Validar();
 
             if (repositorioCaixa.VerificarEtiquetas(novaCaixa))
             {
                 Notificador.ExibirMensagem("Esta etiqueta já pertence a outra caixa.", ConsoleColor.Red);
-                CadastrarCaixa();
+                CadastrarRegistro();
                 return;
             }
 
             if (erros.Length > 0)
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-                CadastrarCaixa();
+                CadastrarRegistro();
                 return;
             }
 
-            repositorioCaixa.CadastrarCaixa(novaCaixa);
+            repositorioCaixa.CadastrarRegistro(novaCaixa);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("A caixa foi cadastrado com sucesso!", ConsoleColor.Green);
         }
 
-        public void EditarCaixa()
+        public override void EditarRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Editando Caixa...");
             Console.WriteLine("--------------------------------------------");
 
-            Caixa[] caixas = repositorioCaixa.SelecionarCaixas();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Caixa[] caixasCadastradas = new Caixa[registros.Length];
 
-            if (!caixas.Any(a => a != null))
+            if (!caixasCadastradas.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há caixas cadastradas para edição.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarCaixas(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Caixa caixaEditada = ObterDadosCaixa();
+            Caixa caixaEditada = ObterDados();
 
             string erros = caixaEditada.Validar();
 
             if (repositorioCaixa.VerificarEtiquetas(caixaEditada))
             {
                 Notificador.ExibirMensagem("Esta etiqueta já pertence a outra caixa.", ConsoleColor.Red);
-                CadastrarCaixa();
+                CadastrarRegistro();
                 return;
             }
 
             if (erros.Length > 0)
             {
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-                EditarCaixa();
+                EditarRegistro();
                 return;
             }
 
-            bool conseguiuEditar = repositorioCaixa.EditarCaixa(idSelecionado, caixaEditada);
+            bool conseguiuEditar = repositorioCaixa.EditarRegistro(idSelecionado, caixaEditada);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("A caixa foi editada com sucesso!", ConsoleColor.Green);
         }
 
-        public void ExcluirCaixa()
+        public override void ExcluirRegistro()
         {
             ExibirCabecalho();
 
             Console.WriteLine("Excluindo Caixa...");
             Console.WriteLine("--------------------------------------------");
 
-            Caixa[] caixas = repositorioCaixa.SelecionarCaixas();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Caixa[] caixasCadastradas = new Caixa[registros.Length];
 
-            if (!caixas.Any(a => a != null))
+            if (!caixasCadastradas.Any(a => a != null))
             {
                 Notificador.ExibirMensagem("Não há caixas cadastradas para exclusão.", ConsoleColor.Yellow);
                 return;
             }
 
-            VisualizarCaixas(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idSelecionado);
+            Caixa caixaSelecionada = (Caixa)repositorioCaixa.SelecionarRegistroPorId(idSelecionado);
 
             if (repositorioCaixa.VerificarRevistasCaixa(caixaSelecionada))
             {
@@ -136,13 +139,13 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
                 return;
             }
 
-            bool conseguiuExcluir = repositorioCaixa.ExcluirCaixa(idSelecionado);
+            bool conseguiuExcluir = repositorioCaixa.ExcluirRegistro(idSelecionado);
 
             Console.WriteLine();
             Notificador.ExibirMensagem("A caixa foi excluída com sucesso!", ConsoleColor.Green);
         }
 
-        public void VisualizarCaixas(bool exibirTitulo)
+        public override void VisualizarRegistros(bool exibirTitulo)
         {
             if (exibirTitulo)
             {
@@ -159,7 +162,8 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
                 "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
             );
 
-            Caixa[] caixasCadastradas = repositorioCaixa.SelecionarCaixas();
+            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
+            Caixa[] caixasCadastradas = new Caixa[registros.Length];
 
             for (int i = 0; i < caixasCadastradas.Length; i++)
             {
@@ -180,12 +184,12 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 
         public void VisualizarRevistasNaCaixa()
         {
-            VisualizarCaixas(false);
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
 
-            Caixa caixaSelecionada = repositorioCaixa.SelecionarCaixaPorId(idCaixa);
+            Caixa caixaSelecionada = (Caixa)repositorioCaixa.SelecionarRegistroPorId(idCaixa);
 
             Console.WriteLine();
             Console.WriteLine("Visualizando Revistas...");
@@ -212,15 +216,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
-        public void ExibirCabecalho()
-        {
-            Console.Clear();
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine("Gestão de Caixas");
-            Console.WriteLine("--------------------------------------------");
-        }
-
-        public Caixa ObterDadosCaixa()
+        public override Caixa ObterDados()
         {
             Console.Write("Digite a etiqueta da caixa: ");
             string etiqueta = Console.ReadLine()!.Trim();

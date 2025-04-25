@@ -1,4 +1,4 @@
-﻿namespace ClubeDoLivroConsoleApp.Gerais
+﻿namespace ClubeDoLivroConsoleApp.Utils
 {
     public static class Notificador
     {

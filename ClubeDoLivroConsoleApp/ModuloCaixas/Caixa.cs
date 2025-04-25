@@ -1,10 +1,10 @@
-﻿using ClubeDoLivroConsoleApp.ModuloRevistas;
+﻿using ClubeDoLivroConsoleApp.Gerais;
+using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
-    public class Caixa
+    public class Caixa : EntidadeBase
     {
-        public int Id;
         public string Etiqueta;
         public string Cor;
         public int DiasDeEmprestimo;
@@ -17,7 +17,7 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             DiasDeEmprestimo = diasDeEmprestimo;
         }
 
-        public string Validar()
+        public override string Validar()
         {
             string erros = "";
 
@@ -78,6 +78,15 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
         public Revista[] ObterRevistas()
         {
             return Revistas;
+        }
+
+        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        {
+            Caixa caixaEditada = (Caixa)registroEditado;
+
+            Etiqueta = caixaEditada.Etiqueta;
+            Cor = caixaEditada.Cor;
+            DiasDeEmprestimo = caixaEditada.DiasDeEmprestimo;
         }
     }
 }

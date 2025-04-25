@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ModuloAmigos\cv1f2qrj.v2d~" />
     <None Remove="ModuloCaixas\RepositorioCaixa.cs~RFd11f08.TMP" />
+    <None Remove="ModuloEmprestimos\TelaEmprestimo.cs~RFdda9049.TMP" />
   </ItemGroup>
 
 </Project>

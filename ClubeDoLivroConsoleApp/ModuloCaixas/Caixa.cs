@@ -5,9 +5,10 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
     public class Caixa : EntidadeBase
     {
-        public string Etiqueta;
-        public string Cor;
-        public int DiasDeEmprestimo;
+        public string Etiqueta { get; set; }
+        public string Cor { get; set; }
+        public int DiasDeEmprestimo { get; set; }
+
         public Revista[] Revistas = new Revista[40];
 
         public Caixa(string etiqueta, string cor, int diasDeEmprestimo)

@@ -31,7 +31,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.WriteLine("--------------------------------------------");
 
             Console.Write("Digite um opção válida: ");
-            char opcaoEscolhida = Console.ReadLine()[0];
+            char opcaoEscolhida = Convert.ToChar(Console.ReadLine()!);
 
             return opcaoEscolhida;
         }
@@ -43,7 +43,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.WriteLine("Cadastrando Revistas...");
             Console.WriteLine("--------------------------------------------");
 
-            Revista novaRevista = ObterDados();
+            Revista novaRevista = (Revista)ObterDados();
 
             string erros = novaRevista.Validar();
 
@@ -61,6 +61,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
                 return;
             }
 
+            novaRevista.Caixa.AdicionarRevista(novaRevista);
             repositorioRevista.CadastrarRegistro(novaRevista);
 
             Console.WriteLine();
@@ -93,7 +94,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
 
             Console.WriteLine();
 
-            Revista revistaEditada = ObterDados();
+            Revista revistaEditada = (Revista)ObterDados();
 
             Caixa caixaEditada = revistaEditada.Caixa;
 
@@ -171,6 +172,11 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             EntidadeBase[] registros = repositorioRevista.SelecionarRegistros();
             Revista[] revistasCadastradas = new Revista[registros.Length];
 
+            for (int i = 0; i < registros.Length; i++)
+            {
+                revistasCadastradas[i] = (Revista)registros[i];
+            }
+
             for (int i = 0; i < revistasCadastradas.Length; i++)
             {
                 Revista r = revistasCadastradas[i];
@@ -199,6 +205,10 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             );
             EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
             Caixa[] caixasCadastradas = new Caixa[registros.Length];
+            for (int i = 0; i < registros.Length; i++)
+            {
+                caixasCadastradas[i] = (Caixa)registros[i];
+            }
             for (int i = 0; i < caixasCadastradas.Length; i++)
             {
                 Caixa c = caixasCadastradas[i];
@@ -211,7 +221,7 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             Console.WriteLine();
         }
 
-        public override Revista ObterDados()
+        public override EntidadeBase ObterDados()
         {
             Console.Write("Digite o titulo da Revista: ");
             string titulo = Console.ReadLine()!.Trim();

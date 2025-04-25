@@ -35,7 +35,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine("--------------------------------------------");
 
             Console.Write("Digite um opção válida: ");
-            char opcaoEscolhida = Console.ReadLine()[0];
+            char opcaoEscolhida = Convert.ToChar(Console.ReadLine()!);
 
             return opcaoEscolhida;
         }
@@ -47,7 +47,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine("Cadastrando Empréstimo...");
             Console.WriteLine("--------------------------------------------");
 
-            Emprestimo novoEmprestimo = ObterDados();
+            Emprestimo novoEmprestimo = (Emprestimo)ObterDados();
 
             if (repositorioEmprestimo.VerificarEmprestimosAmigo(novoEmprestimo.Amigo))
             {
@@ -104,7 +104,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            Emprestimo emprestimoEditado = ObterDados();
+            Emprestimo emprestimoEditado = (Emprestimo)ObterDados();
 
             string erros = emprestimoEditado.Validar();
 
@@ -233,6 +233,10 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             );
             EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
             Amigo[] amigosCadastrados = new Amigo[registros.Length];
+            for (int i = 0; i < registros.Length; i++)
+            {
+                amigosCadastrados[i] = (Amigo)registros[i];
+            }
             for (int i = 0; i < amigosCadastrados.Length; i++)
             {
                 Amigo a = amigosCadastrados[i];
@@ -249,13 +253,13 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
         {
             bool conseguiuSelecionar = true;
             Console.WriteLine();
-
-            VisualizarCaixas();
+            VisualizarRegistros(false);
 
             Console.Write("Digite o ID da caixa que deseja selecionar: ");
             int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
 
             Caixa caixaSelecionada = (Caixa)repositorioCaixa.SelecionarRegistroPorId(idCaixa);
+            Revista[] revistasNaCaixa = caixaSelecionada.ObterRevistas();
 
             if (caixaSelecionada == null)
             {
@@ -264,7 +268,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             }
 
             Console.WriteLine();
-            Console.WriteLine("Visualizando Revistas...");
+            Console.WriteLine("Visualizando Revistas da Caixa \"" + caixaSelecionada.Etiqueta + "\"");
             Console.WriteLine("--------------------------------------------");
             Console.WriteLine();
             Console.WriteLine(
@@ -272,19 +276,18 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
                 "Id", "Titulo", "Numero de edição", "Ano de publicação", "Status de empréstimo"
             );
 
-            Revista[] revistasCadastradas = caixaSelecionada.ObterRevistas();
-
-            for (int i = 0; i < revistasCadastradas.Length; i++)
+            foreach (Revista revista in revistasNaCaixa)
             {
-                Revista r = revistasCadastradas[i];
-                if (r == null) continue;
-                Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -25}",
-                    r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.StatusEmprestimo
-                );
-            }
-            Console.WriteLine();
+                if (revista == null) continue;
 
+                Console.WriteLine(
+                    "{0, -10} | {1, -15} | {2, -21} | {3, -20} | {4, -25}",
+                    revista.Id, revista.Titulo, revista.NumeroEdicao, revista.AnoPublicacao, revista.StatusEmprestimo
+                );
+
+            }
+
+            Console.WriteLine();
             return conseguiuSelecionar;
         }
 
@@ -300,6 +303,10 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             );
             EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
             Caixa[] caixasCadastradas = new Caixa[registros.Length];
+            for (int i = 0; i < registros.Length; i++)
+            {
+                caixasCadastradas[i] = (Caixa)registros[i];
+            }
             for (int i = 0; i < caixasCadastradas.Length; i++)
             {
                 Caixa c = caixasCadastradas[i];
@@ -313,7 +320,7 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Console.WriteLine();
         }
 
-        public override Emprestimo ObterDados()
+        public override EntidadeBase ObterDados()
         {
 
             VisualizarAmigos();

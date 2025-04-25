@@ -30,7 +30,7 @@ namespace ClubeDoLivroConsoleApp
                     if (opcaoEscolhida == '5')
                     {
                         telaAmigo.VisualizarEmprestimosAmigo();
-                        break;
+                        continue;
                     }
                 }
 
@@ -41,7 +41,7 @@ namespace ClubeDoLivroConsoleApp
                     if (opcaoEscolhida == '5')
                     {
                         telaCaixa.VisualizarRevistasNaCaixa();
-                        break;
+                        continue;
                     }
                 }
 
@@ -52,7 +52,7 @@ namespace ClubeDoLivroConsoleApp
                     if (opcaoEscolhida == '5')
                     {
                         telaEmprestimo.RegistrarDevolucao();
-                        break;
+                        continue;
                     }
                 }
 

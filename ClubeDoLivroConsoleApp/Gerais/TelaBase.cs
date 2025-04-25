@@ -37,7 +37,7 @@ namespace ClubeDoLivroConsoleApp.Gerais
             Console.WriteLine("--------------------------------------------");
 
             Console.Write("Digite um opção válida: ");
-            char opcaoEscolhida = Console.ReadLine()[0];
+            char opcaoEscolhida = Convert.ToChar(Console.ReadLine()!);
 
             return opcaoEscolhida;
         }

@@ -3,23 +3,23 @@ using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
-    public class RepositorioAmigo : RepositorioBase
+    public class RepositorioAmigo : RepositorioBase<Amigo>
     {
-        public bool TelefoneRepetido(string telefone, int idIgnorar = -1)
-        {
-            for (int i = 0; i < registros.Length; i++)
-            {
-                if (registros[i] == null)
-                    continue;
+        //public bool TelefoneRepetido(string telefone, int idIgnorar = -1)
+        //{
+        //    for (int i = 0; i < registros.Length; i++)
+        //    {
+        //        if (registros[i] == null)
+        //            continue;
                 
-                Amigo amigo = (Amigo)registros[i];
+        //        Amigo amigo = (Amigo)registros[i];
 
-                if (amigo.Telefone == telefone && registros[i].Id != idIgnorar)
-                    return true;
-            }
+        //        if (amigo.Telefone == telefone && registros[i].Id != idIgnorar)
+        //            return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         public bool VerificarEmprestimosAmigo(Amigo amigoEscolhido)
         {

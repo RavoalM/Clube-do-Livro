@@ -4,7 +4,7 @@ using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloReservas
 {
-    public class Reserva : EntidadeBase
+    public class Reserva : EntidadeBase<Reserva>
     {
         public Amigo Amigo { get; set; }
         public Revista Revista { get; set; }
@@ -50,10 +50,8 @@ namespace ClubeDoLivroConsoleApp.ModuloReservas
             Revista.StatusEmprestimo = "Disponível";
         }
 
-        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        public override void AtualizarRegistro(Reserva reservaEditada)
         {
-            Reserva reservaEditada = (Reserva)registroEditado;
-
             Amigo = reservaEditada.Amigo;
             Revista = reservaEditada.Revista;
         }

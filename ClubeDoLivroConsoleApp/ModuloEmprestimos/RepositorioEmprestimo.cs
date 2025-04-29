@@ -3,7 +3,7 @@ using ClubeDoLivroConsoleApp.Gerais;
 
 namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 {
-    public class RepositorioEmprestimo : RepositorioBase
+    public class RepositorioEmprestimo : RepositorioBase<Emprestimo>
     {
         public bool VerificarEmprestimosAmigo(Amigo amigoEscolhido)
         {

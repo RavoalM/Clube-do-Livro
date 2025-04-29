@@ -4,7 +4,7 @@ using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
 {
-    public class Emprestimo : EntidadeBase
+    public class Emprestimo : EntidadeBase<Emprestimo>
     {
         public Amigo Amigo { get; set; }
         public Revista Revista { get; set; }
@@ -46,10 +46,8 @@ namespace ClubeDoLivroConsoleApp.ModuloEmprestimo
             Revista.Devolver();
         }
 
-        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        public override void AtualizarRegistro(Emprestimo emprestimoEditado)
         {
-            Emprestimo emprestimoEditado = (Emprestimo)registroEditado;
-
             Amigo = emprestimoEditado.Amigo;
             Revista = emprestimoEditado.Revista;
         }

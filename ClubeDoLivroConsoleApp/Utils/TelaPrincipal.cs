@@ -1,5 +1,4 @@
-﻿using ClubeDoLivroConsoleApp.Gerais;
-using ClubeDoLivroConsoleApp.ModuloAmigos;
+﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
 using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 using ClubeDoLivroConsoleApp.ModuloReservas;
@@ -74,7 +73,7 @@ namespace ClubeDoLivroConsoleApp.Utils
             opcaoPrincipal = Console.ReadLine()[0];
         }
 
-        public TelaBase ObterTela()
+        public ITelaCrud ObterTela()
         {
             if (opcaoPrincipal == '1')
             {

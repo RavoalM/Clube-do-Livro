@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace ClubeDoLivroConsoleApp.ModuloRevistas
 {
-    public class Revista : EntidadeBase
+    public class Revista : EntidadeBase<Revista>
     {
         public string Titulo { get; set; }
         public string NumeroEdicao { get; set; }
@@ -95,10 +95,8 @@ namespace ClubeDoLivroConsoleApp.ModuloRevistas
             StatusEmprestimo = "Reservada";
         }
 
-        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        public override void AtualizarRegistro(Revista revistaEditado)
         {
-            Revista revistaEditado = (Revista)registroEditado;
-
             Titulo = revistaEditado.Titulo;
             NumeroEdicao = revistaEditado.NumeroEdicao;
             AnoPublicacao = revistaEditado.AnoPublicacao;

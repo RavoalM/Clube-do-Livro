@@ -5,306 +5,250 @@ using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 using ClubeDoLivroConsoleApp.ModuloRevistas;
 using ClubeDoLivroConsoleApp.Utils;
 
-namespace ClubeDoLivroConsoleApp.ModuloReservas
+namespace ClubeDoLivroConsoleApp.ModuloReservas;
+
+public class TelaReserva : TelaBase<Reserva>, ITelaCrud
 {
-    public class TelaReserva : TelaBase
+    public RepositorioReserva repositorioReserva;
+    public RepositorioAmigo repositorioAmigo;
+    public RepositorioRevista repositorioRevista;
+    public RepositorioEmprestimo repositorioEmprestimo;
+    public RepositorioCaixa repositorioCaixa;
+
+    public TelaReserva(RepositorioReserva repositorioReserva, RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo, RepositorioCaixa repositorioCaixa) : base("Reserva", repositorioReserva)
     {
-        public RepositorioReserva repositorioReserva;
-        public RepositorioAmigo repositorioAmigo;
-        public RepositorioRevista repositorioRevista;
-        public RepositorioEmprestimo repositorioEmprestimo;
-        public RepositorioCaixa repositorioCaixa;
+        this.repositorioReserva = repositorioReserva;
+        this.repositorioEmprestimo = repositorioEmprestimo;
+        this.repositorioAmigo = repositorioAmigo;
+        this.repositorioRevista = repositorioRevista;
+        this.repositorioCaixa = repositorioCaixa;
+    }
 
-        public TelaReserva(RepositorioReserva repositorioReserva, RepositorioEmprestimo repositorioEmprestimo, RepositorioRevista repositorioRevista, RepositorioAmigo repositorioAmigo, RepositorioCaixa repositorioCaixa) : base("Reserva", repositorioReserva)
+    public override char ApresentarMenu()
+    {
+        ExibirCabecalho();
+
+        Console.WriteLine("Escolha a operação desejada:");
+        Console.WriteLine("1 - Cadastro de Reservas");
+        Console.WriteLine("2 - Cancelamento de Reservas");
+        Console.WriteLine("3 - Emprestar revista Reservada");
+        Console.WriteLine("4 - Visualização de Reservas");
+        Console.WriteLine("S - Voltar");
+        Console.WriteLine("--------------------------------------------");
+
+        Console.Write("Digite um opção válida: ");
+        char opcaoEscolhida = Convert.ToChar(Console.ReadLine()!);
+
+        return opcaoEscolhida;
+    }
+
+    public override void CadastrarRegistro()
+    {
+        ExibirCabecalho();
+
+        Console.WriteLine("Cadastrando Reserva...");
+        Console.WriteLine("--------------------------------------------");
+
+        Reserva novaReserva = (Reserva)ObterDados();
+
+        string erros = novaReserva.Validar();
+
+        if (novaReserva.Revista.StatusEmprestimo == "Emprestada")
         {
-            this.repositorioReserva = repositorioReserva;
-            this.repositorioEmprestimo = repositorioEmprestimo;
-            this.repositorioAmigo = repositorioAmigo;
-            this.repositorioRevista = repositorioRevista;
-            this.repositorioCaixa = repositorioCaixa;
+            Notificador.ExibirMensagem("Esta revista já está emprestada a outro membro!", ConsoleColor.Red);
+            return;
         }
 
-        public override char ApresentarMenu()
+        if (erros.Length > 0)
+        {
+            Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+            CadastrarRegistro();
+            return;
+        }
+
+        novaReserva.Revista.Reservar();
+        repositorioReserva.CadastrarRegistro(novaReserva);
+
+        Console.WriteLine();
+        Notificador.ExibirMensagem("A reserva foi cadastrada com sucesso!", ConsoleColor.Green);
+    }
+
+    public override void ExcluirRegistro()
+    {
+        ExibirCabecalho();
+
+        Console.WriteLine("Cancelando Reserva...");
+        Console.WriteLine("--------------------------------------------");
+
+        VisualizarRegistros(false);
+
+        Console.Write("Digite o ID da reserva que deseja selecionar: ");
+        int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+        Reserva reservaSelecionada = (Reserva)repositorioReserva.SelecionarRegistroPorId(idSelecionado);
+
+        bool conseguiuExcluir = repositorioReserva.ExcluirRegistro(idSelecionado);
+
+        Console.WriteLine();
+        Notificador.ExibirMensagem("A reserva foi cancelada com sucesso!", ConsoleColor.Green);
+    }
+
+    public void EmprestarRevistaReservada()
+    {
+        ExibirCabecalho();
+
+        Console.WriteLine("Emprestando Revista Reservada...");
+        Console.WriteLine("--------------------------------------------");
+
+        VisualizarRegistros(false);
+
+        Console.Write("Digite o ID da reserva que deseja selecionar: ");
+        int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+        Reserva reservaSelecionada = (Reserva)repositorioReserva.SelecionarRegistroPorId(idSelecionado);
+
+        reservaSelecionada.Concluir();
+        repositorioEmprestimo.CadastrarRegistro(new Emprestimo(reservaSelecionada.Amigo, reservaSelecionada.Revista));
+
+        Notificador.ExibirMensagem("\nRevista reservada emprestada com sucesso!", ConsoleColor.Green);
+    }
+
+    public override void VisualizarRegistros(bool exibirTitulo)
+    {
+        if (exibirTitulo)
         {
             ExibirCabecalho();
 
-            Console.WriteLine("Escolha a operação desejada:");
-            Console.WriteLine("1 - Cadastro de Reservas");
-            Console.WriteLine("2 - Cancelamento de Reservas");
-            Console.WriteLine("3 - Emprestar revista Reservada");
-            Console.WriteLine("4 - Visualização de Reservas");
-            Console.WriteLine("S - Voltar");
+            Console.WriteLine("Visualizando Reservas...");
             Console.WriteLine("--------------------------------------------");
-
-            Console.Write("Digite um opção válida: ");
-            char opcaoEscolhida = Convert.ToChar(Console.ReadLine()!);
-
-            return opcaoEscolhida;
         }
 
-        public override void CadastrarRegistro()
+        Console.WriteLine();
+
+        Console.WriteLine(
+            "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
+            "Id", "Amigo", "Revista", "Dias De Reserva", "Validade da reserva", "Status de Reserva"
+        );
+
+        List<Reserva> registros = repositorioReserva.SelecionarRegistros();
+
+        foreach (Reserva r in registros)
         {
-            ExibirCabecalho();
-
-            Console.WriteLine("Cadastrando Reserva...");
-            Console.WriteLine("--------------------------------------------");
-
-            Reserva novaReserva = (Reserva)ObterDados();
-
-            string erros = novaReserva.Validar();
-
-
-            if (novaReserva.Revista.StatusEmprestimo == "Emprestada")
-            {
-                Notificador.ExibirMensagem("Esta revista já está emprestada a outro membro!", ConsoleColor.Red);
-                return;
-            }
-
-            if (erros.Length > 0)
-            { 
-                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
-                CadastrarRegistro();
-                return;
-            }
-
-            novaReserva.Revista.Reservar();
-            repositorioReserva.CadastrarRegistro(novaReserva);
-
-            Console.WriteLine();
-            Notificador.ExibirMensagem("A reserva foi cadastrada com sucesso!", ConsoleColor.Green);
-        }
-
-        public override void ExcluirRegistro()
-        {
-            ExibirCabecalho();
-
-            Console.WriteLine("Cancelando Reserva...");
-            Console.WriteLine("--------------------------------------------");
-
-            EntidadeBase[] registros = repositorioReserva.SelecionarRegistros();
-            Reserva[] reservasCadastradas = new Reserva[registros.Length];
-
-            for (int i = 0; i < registros.Length; i++)
-            {
-                reservasCadastradas[i] = (Reserva)registros[i];
-            }
-
-            if (!reservasCadastradas.Any(a => a != null))
-            {
-                Notificador.ExibirMensagem("Não há reservas cadastradas para cancelar.", ConsoleColor.Yellow);
-                return;
-            }
-
-            VisualizarRegistros(false);
-
-            Console.Write("Digite o ID da reserva que deseja selecionar: ");
-            int idSelecionado = Convert.ToInt32(Console.ReadLine());
-
-            Reserva reservaSelecionada = (Reserva)repositorioReserva.SelecionarRegistroPorId(idSelecionado);
-
-            bool conseguiuExcluir = repositorioReserva.ExcluirRegistro(idSelecionado);
-
-            Console.WriteLine();
-            Notificador.ExibirMensagem("A reserva foi cancelada com sucesso!", ConsoleColor.Green);
-        }
-
-        public void EmprestarRevistaReservada()
-        {
-            ExibirCabecalho();
-
-            Console.WriteLine("Emprestando Revista Reservada...");
-            Console.WriteLine("--------------------------------------------");
-
-            EntidadeBase[] registros = repositorioReserva.SelecionarRegistros();
-            Reserva[] reservasCadastradas = new Reserva[registros.Length];
-
-            for (int i = 0; i < registros.Length; i++)
-            {
-                reservasCadastradas[i] = (Reserva)registros[i];
-            }
-
-            if (!reservasCadastradas.Any(a => a != null))
-            {
-                Notificador.ExibirMensagem("Não há reservas para emprestar.", ConsoleColor.Yellow);
-                return;
-            }
-
-            VisualizarRegistros(false);
-
-            Console.Write("Digite o ID da reserva que deseja selecionar: ");
-            int idSelecionado = Convert.ToInt32(Console.ReadLine());
-
-            Reserva reservaSelecionada = (Reserva)repositorioReserva.SelecionarRegistroPorId(idSelecionado);
-
-            reservaSelecionada.Concluir();
-            repositorioEmprestimo.CadastrarRegistro(new Emprestimo(reservaSelecionada.Amigo, reservaSelecionada.Revista));
-
-            Notificador.ExibirMensagem("\nRevista reservada emprestada com sucesso!", ConsoleColor.Green);
-        }
-
-        public override void VisualizarRegistros(bool exibirTitulo)
-        {
-            if (exibirTitulo)
-            {
-                ExibirCabecalho();
-
-                Console.WriteLine("Visualizando Reservas...");
-                Console.WriteLine("--------------------------------------------");
-            }
-
-            Console.WriteLine();
-
             Console.WriteLine(
                 "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}",
-                "Id", "Amigo", "Revista", "Dias De Reserva", "Validade da reserva","Status de Reserva"
+                r.Id, r.Amigo.Nome, r.Revista.Titulo, r.DataReserva.ToShortDateString(), r.ObterDataValidade().ToShortDateString(), r.Status
             );
-
-            EntidadeBase[] registros = repositorioReserva.SelecionarRegistros();
-            Reserva[] reservasCadastradas = new Reserva[registros.Length];
-
-            for (int i = 0; i < registros.Length; i++)
-            {
-                reservasCadastradas[i] = (Reserva)registros[i];
-            }
-
-            for (int i = 0; i < reservasCadastradas.Length; i++)
-            {
-                Reserva r = reservasCadastradas[i];  
-
-                if (r == null) continue;
-
-                Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -18} | {4, -25} | {5, -20}", 
-                    r.Id, r.Amigo.Nome, r.Revista.Titulo, r.DataReserva.ToShortDateString(), r.ObterDataValidade().ToShortDateString(), r.Status
-                );
-            }
-
-            Console.WriteLine();
-
-            Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
 
-        public void VisualizarAmigos()
+        Console.WriteLine();
+
+        Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
+    }
+
+    public void VisualizarAmigos()
+    {
+        Console.WriteLine("Visualizando Membros...");
+        Console.WriteLine("--------------------------------------------");
+        Console.WriteLine();
+        Console.WriteLine(
+            "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
+            "Id", "Nome", "Responsavel", "Telefone"
+        );
+        List<Amigo> registros = repositorioAmigo.SelecionarRegistros();
+        foreach (Amigo a in registros)
         {
-            Console.WriteLine("Visualizando Membros...");
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine();
             Console.WriteLine(
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                "Id", "Nome", "Responsavel", "Telefone"
+                a.Id, a.Nome, a.Responsavel, a.Telefone
             );
-            EntidadeBase[] registros = repositorioAmigo.SelecionarRegistros();
-            Amigo[] amigosCadastrados = new Amigo[registros.Length];
-            for (int i = 0; i < registros.Length; i++)
-            {
-                amigosCadastrados[i] = (Amigo)registros[i];
-            }
-            for (int i = 0; i < amigosCadastrados.Length; i++)
-            {
-                Amigo a = amigosCadastrados[i];
-                if (a == null) continue;
-                Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                    a.Id, a.Nome, a.Responsavel, a.Telefone
-                );
-            }
-            Console.WriteLine();
+        }
+        Console.WriteLine();
+    }
+
+    public bool VisualizarRevistasNaCaixa()
+    {
+        bool conseguiuSelecionar = true;
+        Console.WriteLine();
+        VisualizarCaixas();
+
+        Console.Write("Digite o ID da caixa que deseja selecionar: ");
+        int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
+
+        Caixa caixaSelecionada = (Caixa)repositorioCaixa.SelecionarRegistroPorId(idCaixa);
+        Revista[] revistasNaCaixa = caixaSelecionada.ObterRevistas();
+
+        if (caixaSelecionada == null)
+        {
+            Notificador.ExibirMensagem("Id da caixa selecionada não existe", ConsoleColor.Red);
+            return conseguiuSelecionar = false;
         }
 
-        public bool VisualizarRevistasNaCaixa()
+        Console.WriteLine();
+        Console.WriteLine("Visualizando Revistas da Caixa \"" + caixaSelecionada.Etiqueta + "\"");
+        Console.WriteLine("--------------------------------------------");
+        Console.WriteLine();
+        Console.WriteLine(
+            "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -25}",
+            "Id", "Titulo", "Numero de edição", "Ano de publicação", "Status de empréstimo"
+        );
+
+        foreach (Revista revista in revistasNaCaixa)
         {
-            bool conseguiuSelecionar = true;
-            Console.WriteLine();
-            VisualizarCaixas();
+            if (revista == null) continue;
 
-            Console.Write("Digite o ID da caixa que deseja selecionar: ");
-            int idCaixa = Convert.ToInt32(Console.ReadLine()!.Trim());
-
-            Caixa caixaSelecionada = (Caixa)repositorioCaixa.SelecionarRegistroPorId(idCaixa);
-            Revista[] revistasNaCaixa = caixaSelecionada.ObterRevistas();
-
-            if (caixaSelecionada == null)
-            {
-                Notificador.ExibirMensagem("Id da caixa selecionada não existe", ConsoleColor.Red);
-                return conseguiuSelecionar = false;
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("Visualizando Revistas da Caixa \"" + caixaSelecionada.Etiqueta + "\"");
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine();
             Console.WriteLine(
-                "{0, -10} | {1, -15} | {2, -21} | {3, -15} | {4, -25}",
-                "Id", "Titulo", "Numero de edição", "Ano de publicação", "Status de empréstimo"
+                "{0, -10} | {1, -15} | {2, -21} | {3, -20} | {4, -25}",
+                revista.Id, revista.Titulo, revista.NumeroEdicao, revista.AnoPublicacao, revista.StatusEmprestimo
             );
 
-            foreach (Revista revista in revistasNaCaixa)
-            {
-                if (revista == null) continue;
-
-                Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -20} | {4, -25}",
-                    revista.Id, revista.Titulo, revista.NumeroEdicao, revista.AnoPublicacao, revista.StatusEmprestimo
-                );
-
-            }
-
-            Console.WriteLine();
-            return conseguiuSelecionar;
         }
 
-        public void VisualizarCaixas()
+        Console.WriteLine();
+        return conseguiuSelecionar;
+    }
+
+    public void VisualizarCaixas()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Visualizando Caixas...");
+        Console.WriteLine("--------------------------------------------");
+        Console.WriteLine();
+        Console.WriteLine(
+            "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
+            "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
+        );
+        List<Caixa> registros = repositorioCaixa.SelecionarRegistros();
+        foreach (Caixa c in registros)
         {
-            Console.WriteLine();
-            Console.WriteLine("Visualizando Caixas...");
-            Console.WriteLine("--------------------------------------------");
-            Console.WriteLine();
             Console.WriteLine(
                 "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                "Id", "Etiqueta", "Cor", "Dias De Emprestimo"
+                c.Id, c.Etiqueta, c.Cor, c.DiasDeEmprestimo
             );
-            EntidadeBase[] registros = repositorioCaixa.SelecionarRegistros();
-            Caixa[] caixasCadastradas = new Caixa[registros.Length];
-            for (int i = 0; i < registros.Length; i++)
-            {
-                caixasCadastradas[i] = (Caixa)registros[i];
-            }
-            for (int i = 0; i < caixasCadastradas.Length; i++)
-            {
-                Caixa c = caixasCadastradas[i];
-                if (c == null) continue;
-                Console.WriteLine(
-                    "{0, -10} | {1, -15} | {2, -21} | {3, -15}",
-                    c.Id, c.Etiqueta, c.Cor, c.DiasDeEmprestimo
-                );
-
-            }
-            Console.WriteLine();
         }
+        Console.WriteLine();
+    }
+    public override Reserva ObterDados()
+    {
+        VisualizarAmigos();
 
-        public override EntidadeBase ObterDados()
+        Console.Write("Digite o ID do membro que realizou o empréstimo: ");
+        int idAmigo = Convert.ToInt32(Console.ReadLine()!.Trim());
+
+        bool conseguiuSelecionar = false;
+        conseguiuSelecionar = VisualizarRevistasNaCaixa();
+
+        while (!conseguiuSelecionar)
         {
-            VisualizarAmigos();
-
-            Console.Write("Digite o ID do membro que realizou o empréstimo: ");
-            int idAmigo = Convert.ToInt32(Console.ReadLine()!.Trim());
-
-            bool conseguiuSelecionar = false;
-            conseguiuSelecionar = VisualizarRevistasNaCaixa();
-
-            while (!conseguiuSelecionar)
-            {
-                CadastrarRegistro();
-            }
-
-            Console.Write("Digite o ID da revista que realizou o empréstimo: ");
-            int idRevista = Convert.ToInt32(Console.ReadLine()!.Trim());
-
-            Revista revistaSelecionada = (Revista)repositorioRevista.SelecionarRegistroPorId(idRevista);
-            Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idAmigo);
-
-            Reserva novaReserva = new Reserva(amigoSelecionado, revistaSelecionada);
-            return novaReserva;
+            CadastrarRegistro();
         }
+
+        Console.Write("Digite o ID da revista que realizou o empréstimo: ");
+        int idRevista = Convert.ToInt32(Console.ReadLine()!.Trim());
+
+        Revista revistaSelecionada = (Revista)repositorioRevista.SelecionarRegistroPorId(idRevista);
+        Amigo amigoSelecionado = (Amigo)repositorioAmigo.SelecionarRegistroPorId(idAmigo);
+
+        Reserva novaReserva = new Reserva(amigoSelecionado, revistaSelecionada);
+        return novaReserva;
     }
 }

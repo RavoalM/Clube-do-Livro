@@ -5,88 +5,96 @@ using ClubeDoLivroConsoleApp.ModuloCaixas;
 using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 using ClubeDoLivroConsoleApp.ModuloReservas;
 
-namespace ClubeDoLivroConsoleApp
+namespace ClubeDoLivroConsoleApp;
+
+public interface ITelaCrud
 {
-    internal class Program
+    char ApresentarMenu();
+    void CadastrarRegistro();
+    void EditarRegistro();
+    void ExcluirRegistro();
+    void VisualizarRegistros(bool exibirTitulo);
+}
+
+internal class Program
+{
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        TelaPrincipal.Intruducao();
+
+        TelaPrincipal telaPrincipal = new TelaPrincipal();
+
+        while (true)
         {
-            TelaPrincipal.Intruducao();
+            telaPrincipal.ApresentarMenuPrincipal();
 
-            TelaPrincipal telaPrincipal = new TelaPrincipal();
+            ITelaCrud telaSelecionada = telaPrincipal.ObterTela();
 
-            while (true)
+            char opcaoEscolhida = telaSelecionada.ApresentarMenu();
+
+            if (telaSelecionada is TelaAmigo)
             {
-                telaPrincipal.ApresentarMenuPrincipal();
+                TelaAmigo telaAmigo = (TelaAmigo)telaSelecionada;
 
-                TelaBase telaSelecionada = telaPrincipal.ObterTela();
-
-                char opcaoEscolhida = telaSelecionada.ApresentarMenu();
-
-
-                if (telaSelecionada is TelaAmigo)
+                if (opcaoEscolhida == '5')
                 {
-                    TelaAmigo telaAmigo = (TelaAmigo)telaSelecionada;
+                    telaAmigo.VisualizarEmprestimosAmigo();
+                    continue;
+                }
+            }
 
-                    if (opcaoEscolhida == '5')
-                    {
-                        telaAmigo.VisualizarEmprestimosAmigo();
-                        continue;
-                    }
+            if (telaSelecionada is TelaCaixa)
+            {
+                TelaCaixa telaCaixa = (TelaCaixa)telaSelecionada;
+
+                if (opcaoEscolhida == '5')
+                {
+                    telaCaixa.VisualizarRevistasNaCaixa();
+                    continue;
+                }
+            }
+
+            if (telaSelecionada is TelaEmprestimo)
+            {
+                TelaEmprestimo telaEmprestimo = (TelaEmprestimo)telaSelecionada;
+
+                if (opcaoEscolhida == '5')
+                {
+                    telaEmprestimo.RegistrarDevolucao();
+                    continue;
+                }
+            }
+
+            if (telaSelecionada is TelaReserva)
+            {
+                TelaReserva telaReserva = (TelaReserva)telaSelecionada;
+
+                if (opcaoEscolhida == '2')
+                {
+                    telaReserva.ExcluirRegistro();
+                    continue;
                 }
 
-                if (telaSelecionada is TelaCaixa)
+                if (opcaoEscolhida == '3')
                 {
-                    TelaCaixa telaCaixa = (TelaCaixa)telaSelecionada;
-
-                    if (opcaoEscolhida == '5')
-                    {
-                        telaCaixa.VisualizarRevistasNaCaixa();
-                        continue;
-                    }
+                    telaReserva.EmprestarRevistaReservada();
+                    continue;
                 }
+            }
 
-                if (telaSelecionada is TelaEmprestimo)
-                {
-                    TelaEmprestimo telaEmprestimo = (TelaEmprestimo)telaSelecionada;
+            switch (opcaoEscolhida)
+            {
+                case '1': telaSelecionada.CadastrarRegistro(); break;
 
-                    if (opcaoEscolhida == '5')
-                    {
-                        telaEmprestimo.RegistrarDevolucao();
-                        continue;
-                    }
-                }
+                case '2': telaSelecionada.EditarRegistro(); break;
 
-                if (telaSelecionada is TelaReserva)
-                {
-                    TelaReserva telaReserva = (TelaReserva)telaSelecionada;
+                case '3': telaSelecionada.ExcluirRegistro(); break;
 
-                    if (opcaoEscolhida == '2')
-                    {
-                        telaReserva.ExcluirRegistro();
-                        continue;
-                    }
+                case '4': telaSelecionada.VisualizarRegistros(true); break;
 
-                    if (opcaoEscolhida == '3')
-                    {
-                        telaReserva.EmprestarRevistaReservada();
-                        continue;
-                    }
-                }
-
-                switch (opcaoEscolhida)
-                {
-                    case '1': telaSelecionada.CadastrarRegistro(); break;
-
-                    case '2': telaSelecionada.EditarRegistro(); break;
-
-                    case '3': telaSelecionada.ExcluirRegistro(); break;
-
-                    case '4': telaSelecionada.VisualizarRegistros(true); break;
-
-                    default: break;
-                }
+                default: break;
             }
         }
     }
 }
+

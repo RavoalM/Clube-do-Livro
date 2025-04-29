@@ -1,14 +1,13 @@
-﻿using ClubeDoLivroConsoleApp.ModuloAmigos;
-using ClubeDoLivroConsoleApp.Utils;
+﻿using ClubeDoLivroConsoleApp.Utils;
 
 namespace ClubeDoLivroConsoleApp.Gerais
 {
-    public abstract class TelaBase
+    public abstract class TelaBase<T> where T : EntidadeBase<T>
     {
         protected string nomeEntidade;
-        private RepositorioBase repositorio;
+        private RepositorioBase<T> repositorio;
 
-        protected TelaBase(string nomeEntidade, RepositorioBase repositorio)
+        protected TelaBase(string nomeEntidade, RepositorioBase<T> repositorio)
         {
             this.nomeEntidade = nomeEntidade;
             this.repositorio = repositorio;
@@ -48,7 +47,7 @@ namespace ClubeDoLivroConsoleApp.Gerais
             Console.WriteLine($"Cadastrando {nomeEntidade}...");
             Console.WriteLine("--------------------------------------------");
 
-            EntidadeBase novoRegistro = ObterDados();
+            T novoRegistro = ObterDados();
 
             string erros = novoRegistro.Validar();
 
@@ -73,26 +72,12 @@ namespace ClubeDoLivroConsoleApp.Gerais
             Console.WriteLine($"Editando {nomeEntidade}...");
             Console.WriteLine("--------------------------------------------");
 
-            EntidadeBase[] registros = repositorio.SelecionarRegistros();
-            EntidadeBase[] registrosCadastrados = new EntidadeBase[registros.Length];
-
-            for (int i = 0; i < registros.Length; i++)
-            {
-                registrosCadastrados[i] = registros[i];
-            }
-
-            if (!registros.Any(a => a != null))
-            {
-                Notificador.ExibirMensagem($"Não há {nomeEntidade}s cadastrados para edição.", ConsoleColor.Yellow);
-                return;
-            }
-
             VisualizarRegistros(false);
 
             Console.Write($"Digite o ID do {nomeEntidade} que deseja selecionar: ");
             int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
-            EntidadeBase registroEditado = ObterDados();
+            T registroEditado = ObterDados();
             string erros = registroEditado.Validar();
 
             if (erros.Length > 0)
@@ -115,20 +100,6 @@ namespace ClubeDoLivroConsoleApp.Gerais
             Console.WriteLine($"Excluindo {nomeEntidade}...");
             Console.WriteLine("--------------------------------------------");
 
-            EntidadeBase[] registros = repositorio.SelecionarRegistros();
-            EntidadeBase[] registrosCadastrados = new EntidadeBase[registros.Length];
-
-            for (int i = 0; i < registros.Length; i++)
-            {
-                registrosCadastrados[i] = (Amigo)registros[i];
-            }
-
-            if (!registros.Any(a => a != null))
-            {
-                Notificador.ExibirMensagem("Não há membros cadastrados para exclusão.", ConsoleColor.Yellow);
-                return;
-            }
-
             VisualizarRegistros(false);
 
             Console.Write("Digite o ID do membro que deseja selecionar: ");
@@ -142,6 +113,6 @@ namespace ClubeDoLivroConsoleApp.Gerais
 
         public abstract void VisualizarRegistros(bool v);
 
-        public abstract EntidadeBase ObterDados();
+        public abstract T ObterDados();
     }
 }

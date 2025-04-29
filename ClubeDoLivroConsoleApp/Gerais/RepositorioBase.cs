@@ -1,25 +1,23 @@
 ﻿namespace ClubeDoLivroConsoleApp.Gerais
 {
-    public abstract class RepositorioBase
+    public abstract class RepositorioBase<T> where T : EntidadeBase<T>
     {
-        protected EntidadeBase[] registros = new EntidadeBase[100];
+        private List<T> registros = new List<T>();
         private int contadorIds = 0;
 
-        public void CadastrarRegistro(EntidadeBase novoRegistro)
+        public void CadastrarRegistro(T novoRegistro)
         {
             novoRegistro.Id = ++contadorIds;
-            InserirRegistro(novoRegistro);
+            registros.Add(novoRegistro);
         }
 
-        public bool EditarRegistro(int idRegistro, EntidadeBase registroEditado)
+        public bool EditarRegistro(int idRegistro, T registroEditado)
         {
-            for (int i = 0; i < registros.Length; i++)
+            foreach (T item in registros)
             {
-                if (registros[i] == null) continue;
-
-                else if (registros[i].Id == idRegistro)
+                if (item.Id == idRegistro)
                 {
-                    registros[i].AtualizarRegistro(registroEditado);
+                    item.AtualizarRegistro(registroEditado);
                     return true;
                 }
             }
@@ -29,52 +27,31 @@
 
         public bool ExcluirRegistro(int idRegistro)
         {
-            for (int i = 0; i < registros.Length; i++)
-            {
-                if (registros[i] == null) continue;
+            T registroSelecionado = SelecionarRegistroPorId(idRegistro);
 
-                else if (registros[i].Id == idRegistro)
-                {
-                    registros[i] = null;
-                    return true;
-                }
+            if (registroSelecionado != null)
+            {
+                registros.Remove(registroSelecionado);
+
+                return true;
             }
 
             return false;
         }
 
-        public EntidadeBase SelecionarRegistroPorId(int idRegistro)
+        public T SelecionarRegistroPorId(int idRegistro)
         {
-            for (int i = 0; i < registros.Length; i++)
+            foreach (T item in registros)
             {
-                EntidadeBase e = registros[i];
-
-                if (e == null)
-                    continue;
-
-                else if (e.Id == idRegistro)
-                    return e;
+                if (item.Id == idRegistro)  
+                    return item;
             }
-
             return null;
         }
 
-        public EntidadeBase[] SelecionarRegistros()
+        public List<T> SelecionarRegistros()
         {
             return registros;
         }
-
-        private void InserirRegistro(EntidadeBase registro)
-        {
-            for (int i = 0; i < registros.Length; i++)
-            {
-                if (registros[i] == null)
-                {
-                    registros[i] = registro;
-                    return;
-                }
-            }
-        }
-
     }
 }

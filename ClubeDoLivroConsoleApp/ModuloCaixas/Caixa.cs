@@ -3,7 +3,7 @@ using ClubeDoLivroConsoleApp.ModuloRevistas;
 
 namespace ClubeDoLivroConsoleApp.ModuloCaixas
 {
-    public class Caixa : EntidadeBase
+    public class Caixa : EntidadeBase<Caixa>
     {
         public string Etiqueta { get; set; }
         public string Cor { get; set; }
@@ -81,10 +81,8 @@ namespace ClubeDoLivroConsoleApp.ModuloCaixas
             return Revistas;
         }
 
-        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        public override void AtualizarRegistro(Caixa caixaEditada)
         {
-            Caixa caixaEditada = (Caixa)registroEditado;
-
             Etiqueta = caixaEditada.Etiqueta;
             Cor = caixaEditada.Cor;
             DiasDeEmprestimo = caixaEditada.DiasDeEmprestimo;

@@ -3,7 +3,7 @@ using ClubeDoLivroConsoleApp.ModuloEmprestimo;
 
 namespace ClubeDoLivroConsoleApp.ModuloAmigos
 {
-    public class Amigo : EntidadeBase
+    public class Amigo : EntidadeBase<Amigo>
     {
         public string Nome { get; set; }
         public string Responsavel { get; set; }
@@ -107,10 +107,8 @@ namespace ClubeDoLivroConsoleApp.ModuloAmigos
             return Emprestimos;
         }
 
-        public override void AtualizarRegistro(EntidadeBase registroEditado)
+        public override void AtualizarRegistro(Amigo amigoEditado)
         {
-            Amigo amigoEditado = (Amigo)registroEditado;
-
             Nome = amigoEditado.Nome;
             Responsavel = amigoEditado.Responsavel;
             Telefone = amigoEditado.Telefone;
